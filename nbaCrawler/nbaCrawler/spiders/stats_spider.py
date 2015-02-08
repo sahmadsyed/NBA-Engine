@@ -8,10 +8,13 @@ class StatsSpider(scrapy.Spider):
 
 	def parse(self,response):
 		player_name = response.xpath('//title/text()').extract()[0]
-		first_space = player_name.index(' ')
-		first_name = player_name[0:first_space]
-		second_space = player_name.index(' ', first_space + 1)
-		last_name = player_name[first_space + 1: second_space]
+		player_name = player_name[:player_name.find(' - Wikipedia, the free encyclopedia')]
+		if '(' in player_name:
+			player_name = player_name[:player_name.find('(') - 1]
+		# first_space = player_name.index(' ')
+		# first_name = player_name[0:first_space]
+		# second_space = player_name.index(' ', first_space + 1)
+		# last_name = player_name[first_space + 1: second_space]
 
 		resp = response.xpath('//span[@id = "Regular_season"]/text()|//table[@class = "wikitable sortable"]//td/a/text()|//table[@class = "wikitable sortable"]//td/text()|//table[@class = "wikitable sortable"]//td/b/text()')
 
@@ -31,8 +34,9 @@ class StatsSpider(scrapy.Spider):
 
 		while not stats_end:
 			stats_item = StatsCrawler()
-			stats_item['first_name'] = first_name
-			stats_item['last_name'] = last_name
+			stats_item['name'] = unicode(player_name)
+			#stats_item['first_name'] = first_name
+			#stats_item['last_name'] = last_name
 
 			if resp[count].extract() == 'Career':
 				stats_item['season'] = 'Career'

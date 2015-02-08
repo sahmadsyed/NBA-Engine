@@ -5,22 +5,25 @@ from nbaCrawler.errorutils import write_error
 class InfoSpider(scrapy.Spider):
 	name = 'InfoSpider'
 	allow_domains = ['http://en.wikipedia.org/']
-	current_players = json.loads(open("playerswiki.json").read())
+	current_players = json.loads(open("playerswiki2.json").read())
 	start_urls = [player['player_wiki'] for player in current_players]
 	
 	def parse(self, response):
 		try:
-			
 			info_item = InfoCrawler()
 			player_name = response.xpath('//title/text()').extract()[0]
 			player_name = player_name[:player_name.find(' - Wikipedia, the free encyclopedia')]
-			last_space = player_name.rfind(' ')
-			if last_space == -1:
-				last_space = len(player_name)
-			first_name = player_name[0:last_space]
-			last_name = player_name[last_space + 1:]
-			info_item['first_name'] = unicode(first_name)
-			info_item['last_name'] = unicode(last_name)
+			if '(' in player_name:
+				player_name = player_name[:player_name.find('(') - 1]
+			info_item['name'] = unicode(player_name)
+
+			# last_space = player_name.rfind(' ')
+			# if last_space == -1:
+			# 	last_space = len(player_name)
+			# first_name = player_name[0:last_space]
+			# last_name = player_name[last_space + 1:]
+			# info_item['first_name'] = unicode(first_name)
+			# info_item['last_name'] = unicode(last_name)
 
 			try:
 				img_src = response.xpath('//table[@class = "infobox vcard"][1]//img[1]/@src')

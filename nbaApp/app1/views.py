@@ -9,7 +9,7 @@ def index(request):
     context = RequestContext(request,
                              {'player_list':player_list})
     return HttpResponse(template.render(context))
-def player_name(request,name):
+def player_name(request, name):
     player_list_orig = Player.objects.all()
     player_list = []
     enter_val_len = len(name)

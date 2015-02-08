@@ -11,8 +11,8 @@ ITEM_PIPELINES = {
 }
 
 import sys
-sys.path.insert(0, '/Users/Salman/NBAAPP/nbaApp')
-sys.path.insert(0, '/Users/Salman/NBAAPP/nbaCrawler')
+sys.path.insert(0, '/Users/Salman/Workspace/nbasite/nbaApp')
+sys.path.insert(0, '/Users/Salman/Workspace/nbasite/nbaCrawler')
 
 
 import os
