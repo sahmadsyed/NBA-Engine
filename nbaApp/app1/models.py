@@ -22,7 +22,7 @@ class Statistics(models.Model):
     team = models.CharField('Team', max_length = MAX_CHAR_LENGTH, default = DEFAULT_CHAR)
     season = models.CharField('Season', max_length = MAX_CHAR_LENGTH, default = DEFAULT_CHAR)
     def __unicode__(self):
-       return self.name
+       return '%s %s' % (self.name, self.season)
 
 class Player(models.Model):
     #stats = models.ForeignKey(Statistics, null=True)
