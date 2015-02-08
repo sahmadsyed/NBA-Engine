@@ -1,0 +1,154 @@
+<!-- <body>
+<form name = 'advSearch'>
+<label> Draft Year: </label>
+<input type = 'text' name = 'draft1'></input> to 
+<input type = 'text' name = 'draft2'></input> </br>
+<label> Height: </label>
+<input type = 'text' name = 'draft1'></input> to 
+<input type = 'text' name = 'draft2'></input> </br>
+<label> Weight: </label>
+<input type = 'text' name = 'draft1'></input> to 
+<input type = 'text' name = 'draft2'></input> </br>
+<label> Number: </label>
+<input type = 'text' name = 'draft1'></input> to 
+<input type = 'text' name = 'draft2'></input> </br>
+<label> Position: </label>
+<input type = 'text' name = 'draft1'></input> to 
+<input type = 'text' name = 'draft2'></input> </br>
+</br>
+<label> Teams: </label></br>
+<table border = '0px'>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'celtics'><label>Boston Celtics</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'nets'><label>Brooklyn Nets</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'knicks'><label>New York Knicks</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'sixers'><label>Philadelphia 76ers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'raptors'><label>Toronto Raptors</label></input></td>
+</tr>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'bulls'><label>Chicago Bulls</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'cavs'><label>Cleveland Cavaliers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'pistons'><label>Detroit Pistons</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'pacers'><label>Indiana Pacers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'bucks'><label>bucks</label></input></td>
+</tr>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'hawks'><label>Atlanta Hawks</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'hornets'><label>Charlotte Hornets</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'heat'><label>Miami Heat</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'magic'><label>Orlando Magic</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'wizards'><label>Washington Wizards</label></input></td>
+</tr>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'mavs'><label>Dallas Mavericks</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'rockets'><label>Houston Rockets</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'grizzlies'><label>Memphis Grizzlies</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'pelicans'><label>New Orleans Pelicans</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'spurs'><label>San Antonio Spurs</label></input></tr></td>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'nuggets'><label>Denver Nuggets</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'twolves'><label>Minnesota Timberwolves</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'blazers'><label>Portland Trailblazers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'thunder'><label>Oklahoma City Thunder</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'jazz'><label>Utah Jazz</label></input></td>
+</tr>
+<tr>
+<td><input type = 'checkbox' class = 'teams' value = 'warriors'><label>Golden State Warriors</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'clippers'><label>Los Angeles Clippers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'lakers'><label>Los Angeles Lakers</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'suns'><label>Phoenix Suns</label></input></td>
+<td><input type = 'checkbox' class = 'teams' value = 'kings'><label>Sacramento Kings</label></br></input></td>
+</tr>
+</table>
+</br>
+<label> Statistics: </label>
+
+
+</form>
+
+</body>
+<script>
+
+function createDropDown(){
+	var yearDropDown = document.createElement('SELECT');
+	for (var i = 1990;i<2014;i++){
+		var iToStr = i.toString();
+		var yearDropDownOptVal = document.createTextNode(iToStr);
+		var yearDropDownOpt = document.createElement('OPTION');
+		yearDropDownOpt.appendChild(yearDropDownOptVal);
+		yearDropDown.appendChild(yearDropDownOpt);
+	}
+	document.advSearch.appendChild(yearDropDown);
+}
+
+var statBreakdown = {ppg:['PPG','ppg1','ppg2'],
+					 apg:['APG','apg1','apg2'],
+					 rpg:['RPG','rpg1','rpg2'],
+					 spg:['SPG','spg1','spg2'],
+					 bpg:['BPG','bpg1','bpg2'],
+					 fg:['FG%','fg1','fg2'],
+					 tfg:['3FG%','3fg1','3fg2'],
+					 mpg:['MPG','mpg1','mpg2'],
+					 ft:['FT%','ft1','ft2'],
+					 gp:['GP','gp1','gp2']};
+
+function createStatForm(){
+	var createTable = document.createElement('TABLE');
+	for (var stat in statBreakdown){
+		var createRow = document.createElement('TR');
+		var createCell1 = document.createElement('TD');
+		var createLabel = document.createElement('LABEL');
+		var createLabelText = document.createTextNode(statBreakdown[stat][0]);
+		createLabel.appendChild(createLabelText);
+		createCell1.appendChild(createLabel);
+		
+		var createCell2 = document.createElement('TD');
+		var createTextBox1 = document.createElement('INPUT');
+		createTextBox1.setAttribute('type','text');
+		createTextBox1.setAttribute('name', statBreakdown[stat][1]);
+		createCell2.appendChild(createTextBox1);
+		var createSpan = document.createElement('SPAN');
+		var createWord = document.createTextNode('    to    ');
+		createSpan.appendChild(createWord);
+		createCell2.appendChild(createSpan);
+		var createTextBox2 = document.createElement('INPUT');
+		createTextBox2.setAttribute('type','text');
+		createTextBox2.setAttribute('name', statBreakdown[stat][2]);
+		createCell2.appendChild(createTextBox2);
+		createRow.appendChild(createCell1);
+		createRow.appendChild(createCell2);
+		createTable.appendChild(createRow);
+		document.advSearch.appendChild(createTable);
+	}
+	
+}
+window.onload = createStatForm();
+window.onload = createDropDown();
+</script>
+ -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My wiki</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        	 var xhr = new XMLHttpRequest(); //client request to server
+			 xhr.open("GET","http://en.wikipedia.org/w/api.php?format=json&action=query&titles=Main%20Page&prop=revisions&rvprop=content",false);
+			 xhr.send();
+			 console.log(xhr.status); //#00
+			 console.log(xhr.statusText); //ok?
+			 xmlhttp.onreadystatechange=function() {
+  			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+    			console.log(444);
+  			}
+}
+    	</script>
+</head>
+<body>
+
+    <div id="wikiInfo">&nbsp;</div>
+
+</body>
+</html>

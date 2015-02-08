@@ -1,0 +1,28 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app1/stylesheet.css' %}">
+
+
+<body id = 'body-container'> 
+<input id = 'search' type = 'text' name = 'playername'  value = 'Search Players' >
+</input>
+<div id = 'advSearch'><a> Advanced Search </a></div>
+{% if player_list %}
+	<div id = 'accordion-container'>
+	{% for player in player_list %}
+		<button  class = 'header'> {{player.first_name}} {{player.last_name}} <span style ='font-size:12px'> {{player.team_city}} {{player.team_name}}</span> <span style = 'float:right'> {{player.number}}</span> </button>
+		<div class = 'content'>
+		<p> Number: {{player.number}} </p>
+		<p> Team: {{player.team_city}} {{player.team_name}} </p>
+		<p> Draft Year: {{player.draft_year}} </p>
+		</div>
+	{% endfor %}
+	</div>
+{%else%}
+	<div id = 'noResults'> <spa>No results found</span></div>
+{%endif%}
+
+</body>
+
+<script type = "text/javascript" src = "{% static 'app1/script.js' %}"></script>

@@ -1,0 +1,197 @@
+MINOR
+list index out of range
+Markel Brown - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Cory Jefferson - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Quincy Acy - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Cleanthony Early - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Langston Galloway - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Jerami Grant - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Hollis Thompson - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Tony Wroten - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Bruno Caboclo - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Doug McDermott - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Spencer Dinwiddie - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Ian Mahinmi - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Solomon Hill (basketball) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Shayne Whittington - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Johnny O'Bryant III - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+DeMarre Carroll - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+P. J. Hairston - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Cody Zeller - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+James Ennis (basketball) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Tyler Johnson (basketball) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Hassan Whiteside - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Roy Devyn Marble - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Andrew Nicholson (basketball) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Dwight Powell - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Clint Capela - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Joey Dorsey - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Nate Wolters - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Jimmer Fredette - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Gary Harris - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+MAJOR
+'ascii' codec can't encode character u'\u0107' in position 11: ordinal not in range(128)
+MINOR
+list index out of range
+Lorenzo Brown - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Grant Jerrett - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Ish Smith - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+MAJOR
+'ascii' codec can't encode character u'\xe9' in position 4: ordinal not in range(128)
+MINOR
+list index out of range
+Will Barton - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Allen Crabbe - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Alec Burks - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Ian Clark (basketball) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Rodney Hood - Wikipedia, the free encyclopedia
+
+MAJOR
+'NBA draft' is not in list
+Joe Ingles - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Chris Johnson (basketball, born 1990) - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Elijah Millsap - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+MAJOR
+'ascii' codec can't encode character u'\u0107' in position 12: ordinal not in range(128)
+
+MINOR
+list index out of range
+Tarik Black - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+C. J. Wilcox - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Alex Len - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+T. J. Warren - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Ray McCallum, Jr. - Wikipedia, the free encyclopedia
+
+MINOR
+list index out of range
+Ben McLemore - Wikipedia, the free encyclopedia
+
