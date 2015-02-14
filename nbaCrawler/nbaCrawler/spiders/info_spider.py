@@ -17,7 +17,7 @@ class InfoSpider(scrapy.Spider):
 			if '(' in player_name:
 				player_name = player_name[:player_name.find('(') - 1]
 			info_item['name'] = unicode(player_name)
-
+			info_item['url'] = response.url
 			try:
 				img_src = response.xpath('//table[@class = "infobox vcard"][1]//img[1]/@src')
 				info_item['image'] = str(img_src.extract()[0])

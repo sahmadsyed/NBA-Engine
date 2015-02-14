@@ -11,11 +11,10 @@
 {% if player_list %}
 	<div id = 'accordion-container'>
 	{% for player in player_list %}
-		<button  class = 'header'> {{player.first_name}} {{player.last_name}} <span style ='font-size:12px'> {{player.team_city}} {{player.team_name}}</span> <span style = 'float:right'> {{player.number}}</span> </button>
+		<button  class = 'header'> {{player['info'].name}} <span style ='font-size:12px'> {{player['stats'].team}} </span> <span style = 'float:right'> {{player['info'].position}}</span> </button>
 		<div class = 'content'>
-		<p> Number: {{player.number}} </p>
-		<p> Team: {{player.team_city}} {{player.team_name}} </p>
-		<p> Draft Year: {{player.draft_year}} </p>
+		<p> Team: {{player['info'].team </p>
+		<p> Draft Year: {{player['info'].draft_year}} </p>
 		</div>
 	{% endfor %}
 	</div>

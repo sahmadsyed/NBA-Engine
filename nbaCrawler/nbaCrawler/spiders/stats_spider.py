@@ -5,10 +5,9 @@ from nbaCrawler.errorutils import write_error
 class StatsSpider(scrapy.Spider):
 	name = 'StatsSpider'
 	allow_domains = ['http://en.wikipedia.org/']
-	start_urls = ['http://en.wikipedia.org/wiki/Andrew_Wiggins'] #, 'http://en.wikipedia.org/wiki/Ben_Wallace', 'http://en.wikipedia.org/wiki/Nate_Robinson', 'http://en.wikipedia.org/wiki/Tracy_McGrady']
-	#current_players = json.loads(open("playerswiki2.json").read())
-	#start_urls = [player['player_wiki'] for player in current_players]
-	def parse(self,response):
+	current_players = json.loads(open("playerswiki.json").read())
+	start_urls = [player['player_wiki'] for player in current_players]
+	def parse(self, response):
 		player_name = response.xpath('//title/text()').extract()[0]
 		player_name = player_name[:player_name.find(' - Wikipedia, the free encyclopedia')]
 		if '(' in player_name:
@@ -27,6 +26,7 @@ class StatsSpider(scrapy.Spider):
 		if reg_index == -1:
 			write_error('minorerrors.txt', 'No stats', str(response.url), 'No stats')
 			return
+			
 		resp = resp[reg_index + 1:]
 		stats_end = False
 		count = 0
@@ -35,7 +35,7 @@ class StatsSpider(scrapy.Spider):
 			try:
 				stats_item = StatsCrawler()
 				stats_item['name'] = unicode(player_name)
-
+				stats_item['url'] = response.url
 				if resp[count].extract() == 'Career':
 					stats_item['season'] = 'Career'
 					stats_item['team'] = 'Career'
@@ -46,7 +46,6 @@ class StatsSpider(scrapy.Spider):
 					if resp[count + 1].extract() == u'\u2020':
 						count+= 1
 					stats_item['team'] = resp[count + 1].extract()
-				
 				stats_item['gp'] = resp[count + 2].extract()
 				stats_item['gs'] = resp[count + 3].extract()
 				stats_item['mpg'] = resp[count + 4].extract()
