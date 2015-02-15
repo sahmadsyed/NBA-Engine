@@ -2,6 +2,7 @@ import scrapy, json
 from nbaCrawler.items import StatsCrawler
 from nbaCrawler.errorutils import write_error
 
+
 class StatsSpider(scrapy.Spider):
 	name = 'StatsSpider'
 	allow_domains = ['http://en.wikipedia.org/']
