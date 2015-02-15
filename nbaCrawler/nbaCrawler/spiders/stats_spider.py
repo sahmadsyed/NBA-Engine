@@ -5,7 +5,7 @@ from nbaCrawler.errorutils import write_error
 class StatsSpider(scrapy.Spider):
 	name = 'StatsSpider'
 	allow_domains = ['http://en.wikipedia.org/']
-	current_players = json.loads(open("playerswiki.json").read())
+	current_players = json.loads(open("playerswiki2.json").read())
 	start_urls = [player['player_wiki'] for player in current_players]
 	def parse(self, response):
 		player_name = response.xpath('//title/text()').extract()[0]
@@ -13,11 +13,11 @@ class StatsSpider(scrapy.Spider):
 		if '(' in player_name:
 			player_name = player_name[:player_name.find('(') - 1]
 
-		resp = response.xpath('//span[@id = "Regular_season"]/text()|//table[@class = "wikitable sortable"]//td/a/text()|//table[@class = "wikitable sortable"]//td/text()|//table[@class = "wikitable sortable"]//td/b/text()')
+		resp = response.xpath('//span[@id = "Regular_season"]/text()|//span[@id = "NBA_regular_season"]/text()|//table[@class = "wikitable sortable"]//td/a/text()|//table[@class = "wikitable sortable"]//td/text()|//table[@class = "wikitable sortable"]//td/b/text()|//dt/text()')
 		reg_index = -1
 		for i in resp:
 			try:
-				if i.extract() == 'Regular season':
+				if i.extract() == 'Regular season' or i.extract() == 'NBA regular season':
 					reg_index = resp.index(i)
 					break
 			except Exception as e:
@@ -63,6 +63,5 @@ class StatsSpider(scrapy.Spider):
 				write_error('majorerrors.txt', str(e), str(response.url), 'Unknown')
 				return
 		
-
 
 
