@@ -10,13 +10,51 @@
 <div id = 'advSearch'><a> Advanced Search </a></div>
 {% if player_list %}
 	<div id = 'accordion-container'>
-	{% for player in player_list %}
-		<button  class = 'header'> {{ player.info.name }} <span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.position }}</span> </button>
-		<div class = 'content'>
-		<p> Team: {{ player.stats.team }}</p>
-		<p> Draft Year: {{ player.info.draft_year }} </p>
-		</div>
-	{% endfor %}
+		{% for player in player_list %}
+			<button  class = 'header'> {{ player.info.name }} <span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.position }}</span> </button>
+			<div class = 'content'>
+				<span class = 'info'>
+					<span><b> Team: </b> {{ player.stats.team }} </span></br>
+					<span><b> Draft Year: </b> {{ player.info.draft_year }} </span></br>
+					<span><b> Height: </b> {{ player.info.height }} </span></br>
+					<span><b> Weight: </b> {{ player.info.weight }} </span>
+				</span>
+				<table class = 'stats'>
+					<thead>
+						<tr><th colspan = '11'> {{ player.stats.season }} Season Stats </th></tr>
+						<tr>
+							<th> PPG </th>
+							<th> APG </th>
+							<th> RPG </th>
+							<th> SPG </th>
+							<th> BPG </th>
+							<th> FG </th>
+							<th> TFG </th>
+							<th> MPG </th>
+							<th> FT </th>
+							<th> GP </th>
+							<th> GS </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td> {{ player.stats.ppg }} </td>
+							<td> {{ player.stats.apg }} </td>
+							<td> {{ player.stats.rpg }} </td>
+							<td> {{ player.stats.spg }} </td>
+							<td> {{ player.stats.bpg }} </td>
+							<td> {{ player.stats.fg }} </td>
+							<td> {{ player.stats.tfg }} </td>
+							<td> {{ player.stats.mpg }} </td>
+							<td> {{ player.stats.ft }} </td>
+							<td> {{ player.stats.gp }} </td>
+							<td> {{ player.stats.gs }} </td>
+						</tr>
+					</tbody>
+				</table>
+				<img class = 'pic' src = {{ player.info.image }}></img>
+			</div>
+		{% endfor %}
 	</div>
 {%else%}
 	<div id = 'noResults'> <spa>No results found</span></div>
