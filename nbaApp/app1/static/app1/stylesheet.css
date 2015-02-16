@@ -21,7 +21,7 @@
 	margin: 0 auto;
 	padding-top: 15px;
 	padding-bottom: 20px;
-	height: 200px;
+	height: 210px;
 }
 
 .info {
@@ -47,7 +47,8 @@
 	color: white; 
 	border: 2px solid white; 
 	border-collapse: collapse;
-	margin-left: 28px;
+	position: absolute;
+	right: 300px;
 }
 
 .stats th, td {
@@ -62,9 +63,17 @@
 	position: absolute;
     height: 200px;
     width: 150px;
-    margin-left: 35px;
+    right: 120px;
 }
 
+.viewmore {
+	color: #8A2E8A; 
+	font-family: "Courier New", Courier, monospace; 
+	float: right; 
+	margin-top: 207px; 
+	position: absolute;
+	right: 125px
+}
 
 #search {
 	height: 50px;

@@ -52,13 +52,18 @@
 						</tr>
 					</tbody>
 				</table>
-				<img class = 'pic' src = {{ player.info.image }}></img>
+				{% if player.info.image %}
+					<img class = 'pic' src = {{ player.info.image }}></img>
+				{% else %}
+					<img class = 'pic' src = 'http://i.imgur.com/3FJGY4h.jpg?1'></img>
+				{% endif %}
+				<a class = 'viewmore' href = ''> View more &#9658; </a>
 			</div>
 		{% endfor %}
 	</div>
-{%else%}
-	<div id = 'noResults'> <spa>No results found</span></div>
-{%endif%}
+{% else %}
+	<div id = 'noResults'><span>No results found</span></div>
+{% endif %}
 
 </body>
 
