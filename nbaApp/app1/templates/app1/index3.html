@@ -1,9 +1,19 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'app1/style2.css' %}">
 
 
 
-<body>
-<p> {{ player.name }} </p>
-<p> {{ player.draft_year }} </p>
+<body id = 'body-container'>
+	<span class = 'info'>
+		<span><b> Team: </b> {{ player.team }} </span></br>
+		<span><b> Position: </b> {{ player.position}} </span></br>
+		<span><b> Draft Year: </b> {{ player.draft_year }} </span></br>
+		<span><b> Height: </b> {{ player.height }} </span></br>
+		<span><b> Weight: </b> {{ player.weight }} </span>
+	</span>
+	{% for video in videos %}
+		<object width = "150" height = "110" data = {{ video }}></object></br>
+	{% endfor %}
 </body>
