@@ -11,7 +11,7 @@
 {% if player_list %}
 	<div id = 'accordion-container'>
 		{% for player in player_list %}
-			<button  class = 'header'> {{ player.info.name }} <span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.position }}</span> </button>
+			<button  class = 'header'><span class = 'button-text'> {{ player.info.name }} </span><span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.position }}</span> </button>
 			<div class = 'content'>
 				<span class = 'info'>
 					<span><b> Team: </b> {{ player.stats.team }} </span></br>
@@ -57,7 +57,7 @@
 				{% else %}
 					<img class = 'pic' src = 'http://i.imgur.com/3FJGY4h.jpg?1'></img>
 				{% endif %}
-				<a class = 'viewmore' href = ''> View more &#9658; </a>
+				<a class = 'view-more'> View more &#9658; </a>
 			</div>
 		{% endfor %}
 	</div>
