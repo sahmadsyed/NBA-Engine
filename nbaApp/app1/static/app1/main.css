@@ -1,0 +1,37 @@
+#search {
+	height: 70px;
+	width: 960px;
+	display: block;
+	margin: 0 auto;
+	border: 4px solid black;
+	font-size: 48px;
+	color: #B2CCCC;
+	margin-top: 18%;
+}
+
+
+
+
+
+#body-container {
+	background-image: url("images/floor.jpg");
+	
+}
+
+#advSearch {
+	width: 950px;
+	height: 28px;
+	display: block;
+	margin: 0 auto;
+	text-align: right;
+	font-family: Arial;
+	font-size: 20px;
+}
+
+#advSearch > a {
+	color: black;
+	font-weight: bold;
+}
+
+
+

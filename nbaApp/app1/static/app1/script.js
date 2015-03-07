@@ -29,8 +29,15 @@ function advSearchInit(){
 	get('advSearch').firstChild.href = '/player_list/advsearch/';
 }
 
-window.onload = advSearchInit();
+function a(){
+	get('body-container').style.backgroundImage.height = screen.width;
+	get('body-container').style.backgroundImage.width = screen.height;
+	get('body-container').style.backgroundImage.minHeight = screen.height;
+	get('body-container').style.backgroundImage.minWidth = screen.width;
+}
 
+window.onload = advSearchInit();
+window.onload = a();
 
 $(document).ready(function(){
 	$('.header').click(function(){

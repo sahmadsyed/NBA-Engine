@@ -14,11 +14,10 @@ LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 
 
-def index(request):
+def main(request):
     player_list = []
-    template = loader.get_template('app1/index.html')
-    context = RequestContext(request,
-                             {'player_list': player_list})
+    template = loader.get_template('app1/main.html')
+    context = RequestContext(request)
     return HttpResponse(template.render(context))
 
 def player_name(request, pname):
