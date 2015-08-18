@@ -13,7 +13,6 @@ from oauth2client.tools import argparser
 LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 
-
 def main(request):
     player_list = []
     template = loader.get_template('app1/main.html')
