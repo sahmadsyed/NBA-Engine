@@ -38,9 +38,7 @@ class InfoSpider(scrapy.Spider):
 				info_item['draft_year'] = info[draft_year_index]
 			except Exception as e:
 				write_error('minorerrors.txt', str(e), str(response.url), 'Missing draft year')
-			
 			return info_item
-
 		except Exception as e:
 			write_error('majorerrors.txt', str(e), str(response.url))
 

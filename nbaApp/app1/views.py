@@ -33,23 +33,23 @@ def player_name(request, pname):
             player_info = {'info': player, 'stats': recent_stat}
             player_list.append(player_info)
 
-    template = loader.get_template('app1/index.html')
+    template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))
 
 def no_player_name(request):
     player_list = []
-    template = loader.get_template('app1/index.html')
+    template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))
 
 def adv_search(request):
-    template = loader.get_template('app1/index2.html');
+    template = loader.get_template('app1/main.html');
     context = RequestContext(request);
     return HttpResponse(template.render(context));
     
 def player_page(request, pname):
-    template = loader.get_template('app1/index3.html')
+    template = loader.get_template('app1/profile.html')
     player_name = pname.replace('_', ' ')
     find = Player.objects.filter(name = player_name)
     if not find:
@@ -80,9 +80,6 @@ def player_page(request, pname):
         videos = video_links
     except HttpError, e:
         raise e
-    except Exception, e:
-        raise e
-
     context = RequestContext(request, {'player': player, 'videos': videos, 'stats': stats})
     return HttpResponse(template.render(context))
 

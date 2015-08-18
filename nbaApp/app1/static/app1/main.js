@@ -29,7 +29,7 @@ function advSearchInit(){
 	get('advSearch').firstChild.href = '/player_list/advsearch/';
 }
 
-function a(){
+function adjustDimensions(){
 	get('body-container').style.backgroundImage.height = screen.width;
 	get('body-container').style.backgroundImage.width = screen.height;
 	get('body-container').style.backgroundImage.minHeight = screen.height;
@@ -37,8 +37,7 @@ function a(){
 }
 
 window.onload = advSearchInit();
-window.onload = a();
-
+window.onload = adjustDimensions();
 
 $(document).ready(function(){
 	$('#accordion-container').accordion({collapsible:true});

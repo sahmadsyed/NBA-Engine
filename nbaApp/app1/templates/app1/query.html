@@ -1,8 +1,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'app1/style.css' %}">
-
+<link rel="stylesheet" type="text/css" href="{% static 'app1/query.css' %}">
 
 <body id = 'body-container'> 
 <input id = 'search' type = 'text' name = 'playername'  value = 'Search Players' ></input>
@@ -63,7 +62,6 @@
 {% else %}
 	<div id = 'noResults'><span>No results found</span></div>
 {% endif %}
-
 </body>
 
-<script type = "text/javascript" src = "{% static 'app1/script.js' %}"></script>
+<script type = "text/javascript" src = "{% static 'app1/main.js' %}"></script>
