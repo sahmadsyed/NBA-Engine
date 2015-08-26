@@ -50,11 +50,7 @@
 						</tr>
 					</tbody>
 				</table>
-				{% if player.info.image %}
-					<img class = 'pic' src = {{ player.info.image }}></img>
-				{% else %}
-					<img class = 'pic' src = 'http://i.imgur.com/3FJGY4h.jpg?1'></img>
-				{% endif %}
+				<img class = 'pic' src = {{ player.info.image }}></img>
 				<a class = 'view-more'> View more &#9658; </a>
 			</div>
 		{% endfor %}

@@ -1,7 +1,7 @@
 from django.db.models import Model, CharField, FloatField, TextField, IntegerField
 
-MAX_CHAR_LENGTH = 50
-DEFAULT_NUM = -1
+MAX_CHAR_LENGTH = 500
+DEFAULT_NUM = 0
 
 class Statistics(Model):
     name = CharField('Name', max_length = MAX_CHAR_LENGTH, default = '')
@@ -24,12 +24,12 @@ class Statistics(Model):
 
 class Player(Model):
     name = CharField('Name', max_length = MAX_CHAR_LENGTH, default = '')
-    image = TextField(default = '')
+    image = TextField(default = 'http://i.imgur.com/3FJGY4h.jpg?1')
     draft_year = IntegerField('Draft Year', default = DEFAULT_NUM)
     position = CharField('Position', max_length = MAX_CHAR_LENGTH, default = '')
     height = CharField('Height', max_length = MAX_CHAR_LENGTH, default = '')
     weight = CharField('Weight', max_length = MAX_CHAR_LENGTH, default = '')
-    url = CharField('URL', max_length = 300, default = '')
+    url = CharField('URL', max_length = MAX_CHAR_LENGTH, default = '')
     def __unicode__(self):
         return self.name
 
