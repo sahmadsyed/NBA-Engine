@@ -2,16 +2,50 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.http import Http404, HttpResponse
 from django.core.exceptions import MultipleObjectsReturned
-
-from app1.models import Player, Statistics
-from itertools import dropwhile
-
+from rest_framework import status, generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
+from app1.models import Player, Statistics
+from app1.serializers import StatisticsSerializer, PlayerSerializer
+from log_handler import LogHandler
+from itertools import dropwhile
+from logging import DEBUG
+
 
 LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
+LOGGER = LogHandler('views')
+
+class PlayersList(generics.ListAPIView):
+    serializer_class = PlayerSerializer
+    def get_queryset(self):
+        query = Player.objects.all()
+        name_ = self.request.query_params.get('name')
+        draft_year_ = self.request.query_params.get('draft_year')
+        position_ = self.request.query_params.get('position')
+        height_ = self.request.query_params.get('height')
+        weight_ = self.request.query_params.get('weight')
+        if name_:
+            query = query.filter(name = name_)
+        if draft_year_:
+            query = query.filter(draft_year = draft_year_)
+        if position_:
+            query = query.filter(position = position_)
+        if height_:
+            query = query.filter(height = height_)
+        if weight_:
+            query = query.filter(weight = weight_)
+        return query
+
+class StatisticsList(generics.ListAPIView):
+    serializer_class = StatisticsSerializer
+    def get_queryset(self):
+        name_ = self.request.query_params.get('name')
+        query = Statistics.objects.filter(name = name_)
+        return query
 
 def main(request):
     player_list = []
@@ -32,7 +66,6 @@ def player_name(request, pname):
             player.position = POS_DICT[player.position]
             player_info = {'info': player, 'stats': recent_stat}
             player_list.append(player_info)
-
     template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))

@@ -32,4 +32,3 @@ class Player(Model):
     url = CharField('URL', max_length = MAX_CHAR_LENGTH, default = '')
     def __unicode__(self):
         return self.name
-
