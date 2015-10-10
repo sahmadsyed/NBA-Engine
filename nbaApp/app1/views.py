@@ -2,49 +2,69 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.http import Http404, HttpResponse
 from django.core.exceptions import MultipleObjectsReturned
-from rest_framework import status, generics
+from django.db.models import Q
+from rest_framework import status, generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, ParseError
+from rest_framework.views import APIView
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from app1.models import Player, Statistics
 from app1.serializers import StatisticsSerializer, PlayerSerializer
-from log_handler import LogHandler
+from nbaApp.app1.utils import LogHandler
 from itertools import dropwhile
-from logging import DEBUG
+from logging import DEBUG as d
 
 
 LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
-LOGGER = LogHandler('views')
+LOGGER = LogHandler(__name__)
 
-class PlayersList(generics.ListAPIView):
-    serializer_class = PlayerSerializer
-    def get_queryset(self):
+class PlayersList(APIView):
+
+    def get(self, request, *args, **kwargs):
+        query_set = self.get_players()
+        serializer = PlayerSerializer(query_set, many=True)
+        resp_data = {'count' : len(query_set), 'players' : serializer.data}
+        return Response(resp_data)
+
+    def get_players(self):
         query = Player.objects.all()
         name_ = self.request.query_params.get('name')
         draft_year_ = self.request.query_params.get('draft_year')
         position_ = self.request.query_params.get('position')
-        height_ = self.request.query_params.get('height')
-        weight_ = self.request.query_params.get('weight')
         if name_:
-            query = query.filter(name = name_)
+            query = query.filter(name__iexact = name_)
         if draft_year_:
+            if not draft_year_.isdigit():
+                raise ParseError('Draft year must be a positive integer')
             query = query.filter(draft_year = draft_year_)
         if position_:
-            query = query.filter(position = position_)
-        if height_:
-            query = query.filter(height = height_)
-        if weight_:
-            query = query.filter(weight = weight_)
+            correct_position = position_.lower() in [pos.lower() for pos in POS_DICT.iterkeys()]
+            if not correct_position:
+                raise NotFound('Incorrect position')
+            query = query.filter(Q(position = position_) | Q(position__endswith = position_))
         return query
 
-class StatisticsList(generics.ListAPIView):
-    serializer_class = StatisticsSerializer
-    def get_queryset(self):
+class StatisticsList(APIView):
+    def get(self, request, *args, **kwargs):
+        query_set = self.get_stats()
+        serializer = StatisticsSerializer(query_set, many=True)
+        resp_data = {'count' : len(query_set), 'stats' : serializer.data}
+        return Response(resp_data)
+
+    def get_stats(self):
         name_ = self.request.query_params.get('name')
-        query = Statistics.objects.filter(name = name_)
+        if not name_:
+            raise ParseError('Missing \'name\'')
+        season_ = self.request.query_params.get('season')
+        query = Statistics.objects.filter(name__iexact = name_)
+        if season_:
+            if not season_.isdigit():
+                raise ParseError('Season must be a positive integer')
+            query = query.filter(season = season_)
         return query
 
 def main(request):
