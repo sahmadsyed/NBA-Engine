@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
@@ -27,7 +28,9 @@ LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 LOGGER = LogHandler(__name__)
 
+
 class PlayersList(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         query_set = self.get_players()
@@ -54,6 +57,8 @@ class PlayersList(APIView):
         return query
 
 class StatisticsList(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, *args, **kwargs):
         query_set = self.get_stats()
         serializer = StatisticsSerializer(query_set, many=True)
@@ -152,7 +157,7 @@ def request_token(request):
 
         token = Token.objects.get_or_create(user=user)
 
-        fromaddr = 'salmanahmadsyed@gmail.com'
+        fromaddr = 'pqalmsc@gmail.com'
         toaddr = email
         msg = 'Subject: %s\n\n%s' % ('NBA Authentication Token', 'Authentication Token: %s' % token[0].key)
 
