@@ -1,6 +1,7 @@
 import scrapy
-from scrapy.contrib.djangoitem import DjangoItem
+from scrapy_djangoitem import DjangoItem
 from app1.models import Player, Statistics
+
 
 class StatsCrawler(DjangoItem):
 	django_model = Statistics

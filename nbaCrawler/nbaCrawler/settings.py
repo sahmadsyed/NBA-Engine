@@ -11,9 +11,8 @@ ITEM_PIPELINES = {
 }
 
 import sys
-sys.path.insert(0, '/Users/Salman/Workspace/nbasite/nbaApp')
-sys.path.insert(0, '/Users/Salman/Workspace/nbasite/nbaCrawler')
-
+sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/nbaCrawler')
+sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/nbaApp')
 
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'nbaApp.settings'

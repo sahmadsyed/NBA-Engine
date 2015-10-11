@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 import sys
-sys.path.insert(0, '/Users/Salman/NBAAPP/nbaApp')
+sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/nbaApp')
+sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -41,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	'app1',
     'south',
+    'rest_framework',
+    'rest_framework.authtoken',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,3 +88,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'app1.utils.api_exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}

@@ -31,5 +31,3 @@ for stat in Statistics.objects.all():
 	if TEAMS_DICT.get(stat.team):
 		stat.team = "%s %s" % (stat.team ,TEAMS_DICT.get(stat.team))
 		stat.save()
-
-
