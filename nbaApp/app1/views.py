@@ -1,21 +1,26 @@
 from django.shortcuts import render
 from django.template import RequestContext, loader
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.exceptions import MultipleObjectsReturned
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from app1.models import Player, Statistics
 from app1.serializers import StatisticsSerializer, PlayerSerializer
-from nbaApp.app1.utils import LogHandler
+from app1.utils import LogHandler
+from app1.forms import EmailForm
 from itertools import dropwhile
 from logging import DEBUG as d
+from smtplib import SMTP
 
 
 LAST_SEASON = 2013
@@ -97,7 +102,7 @@ def no_player_name(request):
     return HttpResponse(template.render(context))
 
 def adv_search(request):
-    template = loader.get_template('app1/main.html');
+    template = loader.get_template('app1/apidocs.html');
     context = RequestContext(request);
     return HttpResponse(template.render(context));
     
@@ -135,4 +140,32 @@ def player_page(request, pname):
         raise e
     context = RequestContext(request, {'player': player, 'videos': videos, 'stats': stats})
     return HttpResponse(template.render(context))
+
+def request_token(request):
+    form = EmailForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        user = None
+        try:
+            user = User.objects.get_by_natural_key(email)
+        except ObjectDoesNotExist:
+            user = User.objects.create_user(email)
+
+        token = Token.objects.get_or_create(user=user)
+
+        fromaddr = 'salmanahmadsyed@gmail.com'
+        toaddrs = email
+        msg = 'Authentication Token: %s' % token[0].key
+
+        username = USERNAME
+        password = PASSWORD
+
+        server = SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(username, password)
+        server.sendmail(fromaddr, toaddrs, msg)
+        server.quit()
+        return HttpResponse('Success! Authentication token sent to: %s' % email)
+    else:
+        return HttpResponse('Error! Invalid email address')
 
