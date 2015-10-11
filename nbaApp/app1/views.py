@@ -100,11 +100,6 @@ def no_player_name(request):
     template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))
-
-def adv_search(request):
-    template = loader.get_template('app1/apidocs.html');
-    context = RequestContext(request);
-    return HttpResponse(template.render(context));
     
 def player_page(request, pname):
     template = loader.get_template('app1/profile.html')
@@ -141,11 +136,15 @@ def player_page(request, pname):
     context = RequestContext(request, {'player': player, 'videos': videos, 'stats': stats})
     return HttpResponse(template.render(context))
 
+def api_docs(request):
+    template = loader.get_template('app1/apidocs.html');
+    context = RequestContext(request);
+    return HttpResponse(template.render(context));
+
 def request_token(request):
     form = EmailForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
-        user = None
         try:
             user = User.objects.get_by_natural_key(email)
         except ObjectDoesNotExist:
@@ -154,16 +153,16 @@ def request_token(request):
         token = Token.objects.get_or_create(user=user)
 
         fromaddr = 'salmanahmadsyed@gmail.com'
-        toaddrs = email
-        msg = 'Authentication Token: %s' % token[0].key
+        toaddr = email
+        msg = 'Subject: %s\n\n%s' % ('NBA Authentication Token', 'Authentication Token: %s' % token[0].key)
 
         username = USERNAME
         password = PASSWORD
-
+        
         server = SMTP('smtp.gmail.com:587')
         server.starttls()
         server.login(username, password)
-        server.sendmail(fromaddr, toaddrs, msg)
+        server.sendmail(fromaddr, toaddr, msg)
         server.quit()
         return HttpResponse('Success! Authentication token sent to: %s' % email)
     else:
