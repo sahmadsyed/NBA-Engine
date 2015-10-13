@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
@@ -27,7 +28,9 @@ LAST_SEASON = 2013
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 LOGGER = LogHandler(__name__)
 
+
 class PlayersList(APIView):
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         query_set = self.get_players()
@@ -54,6 +57,8 @@ class PlayersList(APIView):
         return query
 
 class StatisticsList(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, *args, **kwargs):
         query_set = self.get_stats()
         serializer = StatisticsSerializer(query_set, many=True)
@@ -100,11 +105,6 @@ def no_player_name(request):
     template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))
-
-def adv_search(request):
-    template = loader.get_template('app1/apidocs.html');
-    context = RequestContext(request);
-    return HttpResponse(template.render(context));
     
 def player_page(request, pname):
     template = loader.get_template('app1/profile.html')
@@ -141,11 +141,15 @@ def player_page(request, pname):
     context = RequestContext(request, {'player': player, 'videos': videos, 'stats': stats})
     return HttpResponse(template.render(context))
 
+def api_docs(request):
+    template = loader.get_template('app1/apidocs.html');
+    context = RequestContext(request);
+    return HttpResponse(template.render(context));
+
 def request_token(request):
     form = EmailForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
-        user = None
         try:
             user = User.objects.get_by_natural_key(email)
         except ObjectDoesNotExist:
@@ -153,17 +157,17 @@ def request_token(request):
 
         token = Token.objects.get_or_create(user=user)
 
-        fromaddr = 'salmanahmadsyed@gmail.com'
-        toaddrs = email
-        msg = 'Authentication Token: %s' % token[0].key
+        fromaddr = 'pqalmsc@gmail.com'
+        toaddr = email
+        msg = 'Subject: %s\n\n%s' % ('NBA Authentication Token', 'Authentication Token: %s' % token[0].key)
 
         username = USERNAME
         password = PASSWORD
-
+        
         server = SMTP('smtp.gmail.com:587')
         server.starttls()
         server.login(username, password)
-        server.sendmail(fromaddr, toaddrs, msg)
+        server.sendmail(fromaddr, toaddr, msg)
         server.quit()
         return HttpResponse('Success! Authentication token sent to: %s' % email)
     else:
