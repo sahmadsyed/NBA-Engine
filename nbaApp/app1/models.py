@@ -1,5 +1,5 @@
-from django.db.models import Model, CharField, FloatField, TextField, IntegerField
-from django.contrib.auth.models import User #AbstractBaseUser, UserManager
+from django.db.models import Model, CharField, FloatField, TextField, IntegerField, URLField
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.signals import post_save, pre_init
 from django.dispatch import receiver
@@ -25,22 +25,27 @@ class Statistics(Model):
     mpg = FloatField('MPG', default = DEFAULT_NUM)
     ft = FloatField('FT%', default = DEFAULT_NUM)
     gp = FloatField('GP', default = DEFAULT_NUM)
-    gs = FloatField('GS', default = DEFAULT_NUM)
+    to = FloatField('TO', default = DEFAULT_NUM)
     team = CharField('Team', max_length = MAX_CHAR_LENGTH, default = '')
     season = CharField('Season', max_length = MAX_CHAR_LENGTH, default = '')
-    url = CharField('URL', max_length = 300, default = '')
+    player_id = IntegerField('Player ID', null=True)
     def __unicode__(self):
        return '%s %s' % (self.name, self.season)
 
 class Player(Model):
     name = CharField('Name', max_length = MAX_CHAR_LENGTH, default = '')
+    number = IntegerField('Number', null=True)
     image = TextField(default = DEFAULT_PIC_NOT_FOUND)
-    draft_year = IntegerField('Draft Year', default = DEFAULT_NUM)
+    year_enter_league = IntegerField('Year Entered League', null=True)
     position = CharField('Position', max_length = MAX_CHAR_LENGTH, default = '')
     height = CharField('Height', max_length = MAX_CHAR_LENGTH, default = '')
-    height_inches = IntegerField('Height (in)', default = DEFAULT_NUM)
     weight = CharField('Weight', max_length = MAX_CHAR_LENGTH, default = '')
-    weight_lb = IntegerField('Weight (lb)', default = DEFAULT_NUM)
-    url = CharField('URL', max_length = MAX_CHAR_LENGTH, default = '')
+    current_team = CharField('Current Team', max_length = MAX_CHAR_LENGTH, default ='')
+    player_id = IntegerField('Player ID', null=True)
     def __unicode__(self):
         return self.name
+
+class PlayerID(Model):
+    player_id = IntegerField('Player ID', null=True)
+    def __int__(self):
+        return self.player_id

@@ -1,22 +1,33 @@
 import scrapy
-from logging import ERROR
+from logging import ERROR, DEBUG
+from itertools import count
+from xml.dom.minidom import parse
 from nbaCrawler.items import RosterCrawler
 from nbaCrawler.log_handler import LogHandler
 
 class RosterSpider(scrapy.Spider):
 	name = 'RosterSpider'
-	allow_domains = ['http://en.wikipedia.org/']
-	start_urls = ['http://en.wikipedia.org/wiki/List_of_current_NBA_team_rosters']
+	allow_domains = ['http://nba.com/']
 	logger = LogHandler(__name__)
+	xmldom = parse('/home/salman/NBA-Players-Database-Website/nbaCrawler/nbaCrawler/current_players.xml')
+	current_players = xmldom.getElementsByTagName('loc')
+	start_urls = [p.childNodes[0].data for p in current_players]
 
 	def parse(self, response):
 		try:
-			resp = response.xpath('//table[@class = "sortable"]//tr/td[3]/a/@href')
-			wiki = 'http://en.wikipedia.org'	
-			for player in resp:
+			resp = response.xpath('//a[@id="tab-stats"]/@href')
+			for i in count(0, 2):
+				try:
+					player = resp[i]
+				except IndexError:
+					break
 				roster_item = RosterCrawler()
-				roster_item['player_wiki'] = '%s%s' % (wiki, player.extract())
-				yield roster_item
+				url_ = player.extract()
+				first = url_.index('!') + 2
+				last = len(url_) - 1
+				id_ = url_[first:last]
+				roster_item['player_id'] = id_
+				yield roster_item				
 		except Exception, e:
 			self.logger.log(ERROR, '%s - %s (URL: %s)' % ('Roster extraction error', str(e), response.url))
 			return

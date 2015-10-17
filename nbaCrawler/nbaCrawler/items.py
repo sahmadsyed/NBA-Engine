@@ -1,6 +1,6 @@
 import scrapy
 from scrapy_djangoitem import DjangoItem
-from app1.models import Player, Statistics
+from app1.models import Player, Statistics, PlayerID
 
 
 class StatsCrawler(DjangoItem):
@@ -9,6 +9,5 @@ class StatsCrawler(DjangoItem):
 class InfoCrawler(DjangoItem):
 	django_model = Player
 
-class RosterCrawler(scrapy.Item):
-	player_wiki = scrapy.Field()
-
+class RosterCrawler(DjangoItem):
+	django_model = PlayerID
