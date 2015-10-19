@@ -48,7 +48,7 @@ class PlayersList(APIView):
         if draft_year_:
             if not draft_year_.isdigit():
                 raise ParseError('Draft year must be a positive integer')
-            query = query.filter(draft_year = draft_year_)
+            query = query.filter(year_enter_league = draft_year_)
         if position_:
             correct_position = position_.lower() in [pos.lower() for pos in POS_DICT.iterkeys()]
             if not correct_position:
@@ -89,7 +89,7 @@ def player_name(request, pname):
     player_list = []
     for player in players:
         recent_stat = False
-        for stat in dropwhile(lambda stat: stat.url != player.url, last_season_stats):
+        for stat in dropwhile(lambda stat: stat.player_id != player.player_id, last_season_stats):
             recent_stat = stat
             break
         if recent_stat:
@@ -116,7 +116,7 @@ def player_page(request, pname):
         player = find[0]
     else:
         raise MultipleObjectsReturned
-    stats = Statistics.objects.filter(url = player.url)
+    stats = Statistics.objects.filter(player_id = player.player_id)
     if not stats:
         raise Http404
         
