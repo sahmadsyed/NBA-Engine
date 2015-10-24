@@ -1,0 +1,23 @@
+#search { 
+	border: 4px solid black;
+	font-size: 48px;
+	margin-top: 37%;
+	width: 100%;
+	border-radius: 15px;
+}
+
+#body-container {
+	background-image: url("../images/floor.jpg");
+}
+
+#advSearch {
+	text-align: right;
+	font-family: Arial;
+	font-size: 20px;
+	float: right;
+}
+
+#advSearch > a {
+	color: black;
+	font-weight: bold;
+}

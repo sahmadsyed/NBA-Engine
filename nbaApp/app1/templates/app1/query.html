@@ -1,23 +1,29 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'app1/query.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'app1/css/query.css' %}">
 
 <body id = 'body-container'> 
-<input id = 'search' type = 'text' name = 'playername'  value = 'Search Players' ></input>
-<div id = 'advSearch'><a> Advanced Search </a></div>
-{% if player_list %}
+	<div class="col-md-10 col-md-offset-1 input-group input-group-lg">
+		<input id = 'search' type = 'text' name = 'playername'  placeholder = 'Search Players' />
+		<span id = "advSearch"><a href="/player_list/advsearch/"> Advanced Search </a></span>
+	</div>
+	{% if player_list %}
 	<div id = 'accordion-container'>
 		{% for player in player_list %}
-			<button  class = 'header'><span class = 'button-text'> {{ player.info.name }} </span><span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.position }}</span> </button>
-			<div class = 'content'>
-				<span class = 'info'>
-					<span><b> Team: </b> {{ player.stats.team }} </span></br>
-					<span><b> Draft Year: </b> {{ player.info.year_enter_league }} </span></br>
-					<span><b> Height: </b> {{ player.info.height }} </span></br>
-					<span><b> Weight: </b> {{ player.info.weight }} </span>
-				</span>
-				<table class = 'stats'>
+		<button  class = 'player-pill'><span class = 'button-text'> {{ player.info.name }} </span><span style ='font-size:12px'> {{ player.stats.team }} </span> <span style = 'float:right'> {{ player.info.number }}</span> </button>
+		<div class = 'content row'>
+			<div class='info col-md-2'>
+				<span><b> Team: </b> {{ player.stats.team }} </span></br>
+				<span><b> Draft Year: </b> {{ player.info.year_enter_league }} </span></br>
+				<span><b> Height: </b> {{ player.info.height }} ft</span></br>
+				<span><b> Weight: </b> {{ player.info.weight }} lb</span>
+			</div>
+			<div class='col-md-7'>
+				<table class="stats table table-bordered">
 					<thead>
 						<tr><th colspan = '11'> {{ player.stats.season }} Season Stats </th></tr>
 						<tr>
@@ -31,7 +37,7 @@
 							<th> MPG </th>
 							<th> FT </th>
 							<th> GP </th>
-							<th> GS </th>
+							<th> TO </th>
 						</tr>
 					</thead>
 					<tbody>
@@ -46,18 +52,23 @@
 							<td> {{ player.stats.mpg }} </td>
 							<td> {{ player.stats.ft }} </td>
 							<td> {{ player.stats.gp }} </td>
-							<td> {{ player.stats.gs }} </td>
+							<td> {{ player.stats.to }} </td>
 						</tr>
 					</tbody>
 				</table>
+			</div>
+			<div class='col-md-2'>
 				<img class = 'pic' src = {{ player.info.image }}></img>
 				<a class = 'view-more'> View more &#9658; </a>
+				<input class = 'player-id' type = 'hidden' value = {{ player.info.player_id }}/>
 			</div>
+		</div>
 		{% endfor %}
 	</div>
-{% else %}
+	{% else %}
 	<div id = 'noResults'><span>No results found</span></div>
-{% endif %}
+	{% endif %}
 </body>
 
-<script type = "text/javascript" src = "{% static 'app1/main.js' %}"></script>
+<script type = "text/javascript" src = "{% static 'app1/js/main.js' %}"></script>
+<script type = "text/javascript" src = "{% static 'app1/js/query.js' %}"></script>

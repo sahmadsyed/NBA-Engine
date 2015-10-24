@@ -1,54 +1,40 @@
-.header {
+.player-pill {
 	color: black;
 	background-color: white;
-	border-radius:  10px;
-	width: 1200px;
-	height: 50px;
+	border-radius: 10px;
 	font-size: 37px;
 	font-family: "Courier New", Courier, monospace;
-	margin: 0 auto;
-	display: block;
 	text-align: left;
-	border: 2px solid black
+	border: 2px solid black;
+	margin: 0 auto; display: block;
+	width: 95%;
 }
 
 .content {
+	padding-top: 10px;
 	background-color: black;
 	border: 2px solid black;
-	width: 1175px;
-	display: block;
-	text-align: left;
+	width: 93%;
 	margin: 0 auto;
-	padding-top: 15px;
-	padding-bottom: 20px;
-	height: 210px;
-	min-height: 210px;
+	display: block;
 }
 
 .info {
-	position: absolute;
 	margin-top: 20px;
-	float: left;
 	margin-left: 30px;
+	line-height: 300%;
 }
 
 .info span {
 	color: white;
-	font-family: Georgia, serif;
-	display: inline-block;
 	margin-bottom: 17px;
 	font-size: 19px;
 }
 
 .stats {
 	margin-top: 27px;
-	float: left;
-	font-family: Georgia, serif;
 	color: white; 
 	border: 2px solid white; 
-	border-collapse: collapse;
-	position: absolute;
-	margin-left: 300px;
 }
 
 .stats th, td {
@@ -60,46 +46,32 @@
 
 .pic {
 	border: 2px solid white;
-	position: absolute;
-    height: 200px;
-    width: 150px;
-    float: left;
-    margin-left: 1000px;
+	background-color: white;
 }
 
 .view-more {
 	color: #8A2E8A; 
 	font-family: "Courier New", Courier, monospace; 
-	float: left; 
-	margin-top: 207px; 
-	position: absolute;
-	margin-left: 1045px;
 }
 
 #search {
-	height: 50px;
-	width: 1175px;
-	display: block;
-	margin: 0 auto;
-	margin-bottom: 5px;
-	border: 2px solid black;
+	border: 4px solid black;
 	font-size: 35px;
-	color: #B2CCCC
+	margin-bottom: 5px;
+	width: 100%;
+	border-radius: 15px;
 }
 
 #body-container {
-	background-image: url("images/floor.jpg");
-	
+	background-image: url("../images/floor.jpg");
 }
 
 #advSearch {
-	width: 1175px;
-	height: 28px;
-	display: block;
-	margin: 0 auto;
 	text-align: right;
 	font-family: Arial;
 	font-size: 20px;
+	float: right;
+	margin-bottom: 10px;
 }
 
 #advSearch > a {
@@ -122,4 +94,3 @@
 	display: block;
 	margin: 0 auto;
 }
-
