@@ -6,13 +6,9 @@ $(document).ready(function(){
 				if (! activeElem.value) {
 					document.location.href = '/player_list/';
 				} else {
-					console.log(activeElem.value);
 					document.location.href = '/player_list/search/' + activeElem.value;
 				}
 			}
 		}
 	});
 });
-
-
-

@@ -1,12 +1,8 @@
-from django.shortcuts import render
 from django.template import RequestContext, loader
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.core.exceptions import MultipleObjectsReturned
+from django.http import Http404, HttpResponse
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status, generics, mixins
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
@@ -14,14 +10,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from apiclient.discovery import build
 from apiclient.errors import HttpError
-from oauth2client.tools import argparser
 from app1.models import Player, Statistics
 from app1.serializers import StatisticsSerializer, PlayerSerializer
 from app1.utils import LogHandler
 from app1.forms import EmailForm
 from itertools import dropwhile
-from logging import DEBUG as d
 from smtplib import SMTP
+from logging import DEBUG as d
 
 
 LAST_SEASON = '2014-15'
@@ -50,13 +45,12 @@ class PlayersList(APIView):
                 raise ParseError('Draft year must be a positive integer')
             query = query.filter(year_enter_league = draft_year_)
         if position_:
-            correct_position = position_.lower() in [pos.lower() for pos in POS_DICT.iterkeys()]
-            if not correct_position:
+            if position_.lower() not in ['center', 'forward', 'guard']:
                 raise NotFound('Incorrect position')
-            query = query.filter(Q(position = position_) | Q(position__endswith = position_))
+            query = query.filter(position__iexact = position_)
         return query
 
-class StatisticsList(APIView):
+class PastStatisticsList(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
@@ -72,9 +66,13 @@ class StatisticsList(APIView):
         season_ = self.request.query_params.get('season')
         query = Statistics.objects.filter(name__iexact = name_)
         if season_:
+            season_ = str(season_)
             if not season_.isdigit():
                 raise ParseError('Season must be a positive integer')
-            query = query.filter(season = season_)
+            if len(season_) != 4:
+                raise ParseError('Season must be the following format: yyyy')
+            formatted_season = '%s-%s' % (season_, str(int(season_) + 1)[-2:])
+            query = query.filter(season = formatted_season)
         return query
 
 def main(request):
@@ -164,4 +162,3 @@ def request_token(request):
         return HttpResponse('Success! Authentication token sent to: %s' % email)
     else:
         return HttpResponse('Error! Invalid email address')
-

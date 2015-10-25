@@ -10,7 +10,6 @@ LOGGER = LogHandler(__name__)
 
 def get_career_stats():
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
-	LOGGER.log(ERROR, player_ids)
 	params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
 
 	count = 1
