@@ -12,7 +12,7 @@ LOGGER = LogHandler(__name__)
 def get_player_info():
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
 	params_ = {'LeagueID' : LEAGUE_ID, 'SeasonType' : SEASON_TYPE}
-	
+	Player.objects.all().delete()
 	count = 1
 	for play_id in player_ids:
 		try:
