@@ -11,7 +11,7 @@ LOGGER = LogHandler(__name__)
 def get_career_stats():
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
 	params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
-
+	Statistics.objects.all().delete()
 	count = 1
 	for play_id in player_ids:
 		try:
@@ -20,7 +20,7 @@ def get_career_stats():
 			stats_list = request['resultSets'][0]['rowSet']
 			name_ = Player.objects.get(player_id=play_id).name
 			
-			for stat in stats_list:
+			for stat in stats_list[:-1]:
 				print stat[1]
 				stats = Statistics()
 				stats.name = name_

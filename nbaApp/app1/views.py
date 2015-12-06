@@ -1,8 +1,8 @@
 from django.template import RequestContext, loader
 from django.http import Http404, HttpResponse
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
@@ -10,18 +10,28 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from apiclient.discovery import build
 from apiclient.errors import HttpError
-from app1.models import Player, Statistics
+from app1.models import Player, Statistics, PlayerID
 from app1.serializers import StatisticsSerializer, PlayerSerializer
 from app1.utils import LogHandler
 from app1.forms import EmailForm
-from itertools import dropwhile
 from smtplib import SMTP
-from logging import DEBUG as d
+from logging import ERROR, INFO
+from requests import get
+from datetime import datetime
+from itertools import dropwhile
 
 
-LAST_SEASON = '2014-15'
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 LOGGER = LogHandler(__name__)
+STATS_URL = 'http://stats.nba.com/stats/playercareerstats'
+LEAGUE_ID = '00'
+PER_MODE = 'PerGame'
+CURRENT_SEASON_STATS_KEY = 'current_season_stats'
+NOW = datetime.now()
+if NOW.month >= 11:
+    CURRENT_SEASON = '%s-%s' % (NOW.year, str(NOW.year + 1)[-2:])
+else:
+    CURRENT_SEASON = '%s-%s' % (NOW.year - 1, str(NOW.year)[-2:])
 
 
 class PlayersList(APIView):
@@ -80,18 +90,61 @@ def main(request):
     context = RequestContext(request)
     return HttpResponse(template.render(context))
 
+def cache_current_season_stats():
+    player_ids = [p.player_id for p in PlayerID.objects.all()]
+    params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
+    current_season_stats = []
+    print 'Caching........'
+    for play_id in player_ids:
+        try:
+            params_['PlayerID'] = play_id
+            request = get(STATS_URL, params=params_).json()
+            name_ = Player.objects.get(player_id=play_id).name
+            stats_list = request['resultSets'][0]['rowSet']
+            current_stats = [i for i in dropwhile(lambda s: s[1] != CURRENT_SEASON, stats_list)]
+
+            if current_stats:
+                stat = current_stats[-1]
+                stats = Statistics()
+                stats.name = name_
+                stats.ppg = stat[26]
+                stats.apg = stat[21]
+                stats.rpg = stat[20]
+                stats.spg = stat[22]
+                stats.bpg = stat[23]
+                stats.fg = stat[11]
+                stats.tfg = stat[14]
+                stats.mpg = stat[8]
+                stats.ft = stat[17]
+                stats.gp = stat[6]
+                stats.to = stat[24]
+                stats.team = stat[4]
+                stats.season = stat[1]
+                stats.player_id = play_id
+                current_season_stats.append(stats)
+                print('Cached: %s' % name_)
+        except Exception, e:
+            LOGGER.log(ERROR, 'Caching Error')
+            LOGGER.log(ERROR, 'ID: %d' % play_id)
+            LOGGER.log(ERROR, 'Error: %s' % e)
+
+    cache.set(CURRENT_SEASON_STATS_KEY, current_season_stats)
+
 def player_name(request, pname):
+    if not cache.get(CURRENT_SEASON_STATS_KEY):
+        cache_current_season_stats()
+    current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
     players = Player.objects.filter(name__contains = pname)
-    last_season_stats = Statistics.objects.filter(name__contains = pname, season = LAST_SEASON)
+
     player_list = []
     for player in players:
-        recent_stat = False
-        for stat in dropwhile(lambda stat: stat.player_id != player.player_id, last_season_stats):
-            recent_stat = stat
-            break
+        recent_stat = filter(lambda s: s.player_id == player.player_id, current_season_stats)
         if recent_stat:
-            player_info = {'info': player, 'stats': recent_stat}
-            player_list.append(player_info)
+            player_list.append({'info': player, 'stats': recent_stat[0]})
+        else:
+            LOGGER.log(INFO, 'Missing current season stats: %s' % player.name)
+            player_list.append({'info': player, 'stats': []})
+
     template = loader.get_template('app1/query.html')
     context = RequestContext(request, {'player_list': player_list})
     return HttpResponse(template.render(context))
