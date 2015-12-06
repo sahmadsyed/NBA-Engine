@@ -85,6 +85,21 @@ class PastStatisticsList(APIView):
             query = query.filter(season = formatted_season)
         return query
 
+class CurrentStatistics(PastStatisticsList):
+    def get_stats(self):
+        if not cache.get(CURRENT_SEASON_STATS_KEY):
+            cache_current_season_stats()
+
+        current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
+
+        name_ = self.request.query_params.get('name')
+        if name_:
+            name_ = name_.lower()
+            stats = filter(lambda s: s.name.lower() == name_, current_season_stats)
+            return stats
+        else:
+            return current_season_stats
+
 def main(request):
     template = loader.get_template('app1/main.html')
     context = RequestContext(request)
