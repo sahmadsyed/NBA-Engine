@@ -12,14 +12,12 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from app1.models import Player, Statistics, PlayerID
 from app1.serializers import StatisticsSerializer, PlayerSerializer
-from app1.utils import LogHandler
+from app1.utils import LogHandler, get_current_season
 from app1.forms import EmailForm
 from smtplib import SMTP
 from logging import ERROR, INFO
 from requests import get
-from datetime import datetime
 from itertools import dropwhile
-
 
 POS_DICT = {'Guard': 'G', 'Forward': 'F', 'Center': 'C', 'Power forward': 'PF', 'Small forward': 'SF', 'Shooting guard': 'SG', 'Point guard': 'PG'}
 LOGGER = LogHandler(__name__)
@@ -27,11 +25,6 @@ STATS_URL = 'http://stats.nba.com/stats/playercareerstats'
 LEAGUE_ID = '00'
 PER_MODE = 'PerGame'
 CURRENT_SEASON_STATS_KEY = 'current_season_stats'
-NOW = datetime.now()
-if NOW.month >= 11:
-    CURRENT_SEASON = '%s-%s' % (NOW.year, str(NOW.year + 1)[-2:])
-else:
-    CURRENT_SEASON = '%s-%s' % (NOW.year - 1, str(NOW.year)[-2:])
 
 
 class PlayersList(APIView):
@@ -116,7 +109,8 @@ def cache_current_season_stats():
             request = get(STATS_URL, params=params_).json()
             name_ = Player.objects.get(player_id=play_id).name
             stats_list = request['resultSets'][0]['rowSet']
-            current_stats = [i for i in dropwhile(lambda s: s[1] != CURRENT_SEASON, stats_list)]
+            current_season = get_current_season()
+            current_stats = [i for i in dropwhile(lambda s: s[1] != current_season, stats_list)]
 
             if current_stats:
                 stat = current_stats[-1]
@@ -133,9 +127,15 @@ def cache_current_season_stats():
                 stats.ft = stat[17]
                 stats.gp = stat[6]
                 stats.to = stat[24]
-                stats.team = stat[4]
                 stats.season = stat[1]
                 stats.player_id = play_id
+
+                # gets correct team in case traded mid-season
+                if stat[4] == 'TOT':
+                    stats.team = current_stats[-2][4]
+                else:
+                    stats.team = stat[4]
+
                 current_season_stats.append(stats)
                 print('Cached: %s' % name_)
         except Exception, e:

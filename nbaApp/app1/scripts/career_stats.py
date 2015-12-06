@@ -1,12 +1,13 @@
 from requests import get
 from logging import ERROR
 from app1.models import Statistics, PlayerID, Player
-from app1.utils import LogHandler
+from app1.utils import LogHandler, get_current_season
 
 URL = 'http://stats.nba.com/stats/playercareerstats'
 LEAGUE_ID = '00'
 PER_MODE = 'PerGame'
 LOGGER = LogHandler(__name__)
+
 
 def get_career_stats():
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
@@ -19,8 +20,14 @@ def get_career_stats():
 			request = get(URL, params=params_).json()
 			stats_list = request['resultSets'][0]['rowSet']
 			name_ = Player.objects.get(player_id=play_id).name
-			
-			for stat in stats_list[:-1]:
+			current_season = get_current_season()
+			stat_count = 0
+
+			for stat in stats_list:
+				stat_count+=1
+				# do not save if it is current regular season stats
+				if stat_count == len(stats_list) and stat[1] == current_season:
+					break
 				print stat[1]
 				stats = Statistics()
 				stats.name = name_
