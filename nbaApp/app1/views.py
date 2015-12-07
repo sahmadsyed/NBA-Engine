@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
+from django.core.paginator import Paginator, InvalidPage
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
@@ -25,6 +26,7 @@ STATS_URL = 'http://stats.nba.com/stats/playercareerstats'
 LEAGUE_ID = '00'
 PER_MODE = 'PerGame'
 CURRENT_SEASON_STATS_KEY = 'current_season_stats'
+SEARCH_PLAYER_KEY = 'searched'
 
 
 class PlayersList(APIView):
@@ -146,22 +148,42 @@ def cache_current_season_stats():
     cache.set(CURRENT_SEASON_STATS_KEY, current_season_stats)
 
 def player_name(request, pname):
-    if not cache.get(CURRENT_SEASON_STATS_KEY):
-        cache_current_season_stats()
-    current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
-    players = Player.objects.filter(name__contains = pname)
+    searched_players = cache.get(SEARCH_PLAYER_KEY)
+    if searched_players and pname in searched_players:
+        player_list = searched_players[pname]
+    else:
+        if not cache.get(CURRENT_SEASON_STATS_KEY):
+            cache_current_season_stats()
+        current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
+        players = Player.objects.filter(name__contains = pname)
 
-    player_list = []
-    for player in players:
-        recent_stat = filter(lambda s: s.player_id == player.player_id, current_season_stats)
-        if recent_stat:
-            player_list.append({'info': player, 'stats': recent_stat[0]})
-        else:
-            LOGGER.log(INFO, 'Missing current season stats: %s' % player.name)
-            player_list.append({'info': player, 'stats': []})
+        player_list = []
+        for player in players:
+            recent_stat = filter(lambda s: s.player_id == player.player_id, current_season_stats)
+            if recent_stat:
+                player_list.append({'info': player, 'stats': recent_stat[0]})
+            else:
+                LOGGER.log(INFO, 'Missing current season stats: %s' % player.name)
+                player_list.append({'info': player, 'stats': []})
+
+        cache.set(SEARCH_PLAYER_KEY, {pname : player_list}, 600)
+
+    paginator = Paginator(player_list, 15)
+    page = request.GET.get('page')
+    try:
+        player_list = paginator.page(page)
+        current_page = int(page)
+    except InvalidPage:
+        player_list = paginator.page(1)
+        current_page = 1
+
+    if paginator.num_pages > 1:
+        page_range = paginator.page_range
+    else:
+        page_range = False
 
     template = loader.get_template('app1/query.html')
-    context = RequestContext(request, {'player_list': player_list})
+    context = RequestContext(request, {'player_list': player_list, 'page_range': page_range, 'current_page': current_page})
     return HttpResponse(template.render(context))
 
 def no_player_name(request):
