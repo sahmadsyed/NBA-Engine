@@ -6,7 +6,7 @@ $(document).ready(function(){
 				if (! activeElem.value) {
 					document.location.href = '/player_list/';
 				} else {
-					document.location.href = '/player_list/search/' + activeElem.value;
+					document.location.href = '/player_list/search/' + activeElem.value.trim();
 				}
 			}
 		}

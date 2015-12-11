@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
-from rest_framework.response import Response
+from django.conf import settings
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from apiclient.discovery import build
 from apiclient.errors import HttpError
+from cacheback.base import Job
 from app1.models import Player, Statistics, PlayerID
 from app1.serializers import StatisticsSerializer, PlayerSerializer
 from app1.utils import LogHandler, get_current_season
@@ -25,7 +26,6 @@ LOGGER = LogHandler(__name__)
 STATS_URL = 'http://stats.nba.com/stats/playercareerstats'
 LEAGUE_ID = '00'
 PER_MODE = 'PerGame'
-CURRENT_SEASON_STATS_KEY = 'current_season_stats'
 SEARCH_PLAYER_KEY = 'searched'
 
 
@@ -82,11 +82,7 @@ class PastStatisticsList(APIView):
 
 class CurrentStatistics(PastStatisticsList):
     def get_stats(self):
-        if not cache.get(CURRENT_SEASON_STATS_KEY):
-            cache_current_season_stats()
-
-        current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
-
+        current_season_stats = CurrentSeasonStats().get()
         name_ = self.request.query_params.get('name')
         if name_:
             name_ = name_.lower()
@@ -95,66 +91,70 @@ class CurrentStatistics(PastStatisticsList):
         else:
             return current_season_stats
 
+class CurrentSeasonStats(Job):
+    lifetime = 86400
+    fetch_on_miss = True
+
+    def fetch(self):
+        player_ids = [p.player_id for p in PlayerID.objects.all()]
+        params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
+        current_season_stats = []
+        LOGGER.log(INFO,'Caching........')
+        for play_id in player_ids:
+            try:
+                params_['PlayerID'] = play_id
+                request = get(STATS_URL, params=params_).json()
+                name_ = Player.objects.get(player_id=play_id).name
+                stats_list = request['resultSets'][0]['rowSet']
+                current_season = get_current_season()
+                current_stats = [i for i in dropwhile(lambda s: s[1] != current_season, stats_list)]
+
+                if current_stats:
+                    stat = current_stats[-1]
+                    stats = Statistics()
+                    stats.name = name_
+                    stats.ppg = stat[26]
+                    stats.apg = stat[21]
+                    stats.rpg = stat[20]
+                    stats.spg = stat[22]
+                    stats.bpg = stat[23]
+                    stats.fg = stat[11]
+                    stats.tfg = stat[14]
+                    stats.mpg = stat[8]
+                    stats.ft = stat[17]
+                    stats.gp = stat[6]
+                    stats.to = stat[24]
+                    stats.season = stat[1]
+                    stats.player_id = play_id
+
+                    # gets correct team in case traded mid-season
+                    if stat[4] == 'TOT':
+                        stats.team = current_stats[-2][4]
+                    else:
+                        stats.team = stat[4]
+
+                    current_season_stats.append(stats)
+                    LOGGER.log(INFO, 'Cached: %s' % name_)
+            except Exception, e:
+                LOGGER.log(ERROR, 'Caching Error')
+                LOGGER.log(ERROR, 'ID: %d' % play_id)
+                LOGGER.log(ERROR, 'Error: %s' % e)
+        return current_season_stats
+
+    def should_stale_item_be_fetched_synchronously(self, delta):
+        return False
+
 def main(request):
     template = loader.get_template('app1/main.html')
     context = RequestContext(request)
     return HttpResponse(template.render(context))
-
-def cache_current_season_stats():
-    player_ids = [p.player_id for p in PlayerID.objects.all()]
-    params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
-    current_season_stats = []
-    print 'Caching........'
-    for play_id in player_ids:
-        try:
-            params_['PlayerID'] = play_id
-            request = get(STATS_URL, params=params_).json()
-            name_ = Player.objects.get(player_id=play_id).name
-            stats_list = request['resultSets'][0]['rowSet']
-            current_season = get_current_season()
-            current_stats = [i for i in dropwhile(lambda s: s[1] != current_season, stats_list)]
-
-            if current_stats:
-                stat = current_stats[-1]
-                stats = Statistics()
-                stats.name = name_
-                stats.ppg = stat[26]
-                stats.apg = stat[21]
-                stats.rpg = stat[20]
-                stats.spg = stat[22]
-                stats.bpg = stat[23]
-                stats.fg = stat[11]
-                stats.tfg = stat[14]
-                stats.mpg = stat[8]
-                stats.ft = stat[17]
-                stats.gp = stat[6]
-                stats.to = stat[24]
-                stats.season = stat[1]
-                stats.player_id = play_id
-
-                # gets correct team in case traded mid-season
-                if stat[4] == 'TOT':
-                    stats.team = current_stats[-2][4]
-                else:
-                    stats.team = stat[4]
-
-                current_season_stats.append(stats)
-                print('Cached: %s' % name_)
-        except Exception, e:
-            LOGGER.log(ERROR, 'Caching Error')
-            LOGGER.log(ERROR, 'ID: %d' % play_id)
-            LOGGER.log(ERROR, 'Error: %s' % e)
-
-    cache.set(CURRENT_SEASON_STATS_KEY, current_season_stats)
 
 def player_name(request, pname):
     searched_players = cache.get(SEARCH_PLAYER_KEY)
     if searched_players and pname in searched_players:
         player_list = searched_players[pname]
     else:
-        if not cache.get(CURRENT_SEASON_STATS_KEY):
-            cache_current_season_stats()
-        current_season_stats = cache.get(CURRENT_SEASON_STATS_KEY)
+        current_season_stats = CurrentSeasonStats().get()
         players = Player.objects.filter(name__contains = pname)
 
         player_list = []
@@ -200,7 +200,7 @@ def player_page(request, pid):
         raise Http404
         
     try:
-        youtube = build('youtube', 'v3', developerKey = 'AIzaSyC0To03T3OlRJHT03gvErJmeFQ5cbsauLo')
+        youtube = build('youtube', 'v3', developerKey = settings.YOUTUBE_DEVELOPER_KEY)
         response = youtube.search().list(part = 'id', 
                                          q = player.name,
                                          maxResults = 10,
@@ -241,8 +241,8 @@ def request_token(request):
         toaddr = email
         msg = 'Subject: %s\n\n%s' % ('NBA Authentication Token', 'Authentication Token: %s' % token[0].key)
 
-        username = USERNAME
-        password = PASSWORD
+        username = settings.NBA_APP_EMAIL
+        password = settings.NBA_APP_PASSWORD
         
         server = SMTP('smtp.gmail.com:587')
         server.starttls()
