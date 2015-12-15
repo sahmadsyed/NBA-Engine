@@ -82,3 +82,11 @@
 	display: block;
 	margin: 0 auto;
 }
+
+#accordion-container {
+	display: none;
+}
+
+#pagination-container {
+	display: none;
+}

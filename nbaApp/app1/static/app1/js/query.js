@@ -15,6 +15,7 @@ function accordionSetup() {
 }
 
 $(document).ready(function(){
+	$('#accordion-container,#pagination-container').show();
 	accordionSetup();
 	$('.player-pill').click(function(){
 		var infoBlock = this.parentElement.nextElementSibling;
