@@ -9,6 +9,7 @@ from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from cacheback.base import Job
@@ -74,8 +75,6 @@ class PastStatisticsList(APIView):
             season_ = str(season_)
             if not season_.isdigit():
                 raise ParseError('Season must be a positive integer')
-            if len(season_) != 4:
-                raise ParseError('Season must be the following format: yyyy')
             formatted_season = '%s-%s' % (season_, str(int(season_) + 1)[-2:])
             query = query.filter(season = formatted_season)
         return query
