@@ -19,7 +19,7 @@
     <div class="panel panel-info">
       <div class="panel-heading"><b>Authentication Token</b></div>
       <div class="panel-body">
-        <form action="/player_list/api/email_confirm/" method="post">
+        <form action="/api/email_confirm/" method="post">
           {% csrf_token %}
           {{ form }}
           <div class="form-group">
@@ -69,7 +69,7 @@
         <h4 class="endpoint-title">Request</h4>
         <p class="well well-sm resource">
           <code>
-            curl --request GET "http://127.0.0.1:8000/player_list/api/players?name=Chris+Bosh" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
+            curl --request GET "http://127.0.0.1:8000/api/players?name=Chris+Bosh" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
           </code>
         </p>
         <h4 class="endpoint-title">Response</h4>
@@ -122,7 +122,7 @@
         <h4 class="endpoint-title">Request</h4>
         <p class="well well-sm resource">
           <code>
-            curl --request GET "http://127.0.0.1:8000/player_list/api/past_statistics?name=LeBron+James&season=2003" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
+            curl --request GET "http://127.0.0.1:8000/api/past_statistics?name=LeBron+James&season=2003" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
           </code>
         </p>
         <h4 class="endpoint-title">Response</h4>

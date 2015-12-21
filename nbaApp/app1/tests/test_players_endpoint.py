@@ -8,7 +8,7 @@ LOGGER = LogHandler(__name__)
 
 
 class PlayersEndpointTests(BaseEndpointTests):
-	URL = 'http://127.0.0.1:8000/player_list/api/players/'
+	URL = 'http://127.0.0.1:8000/api/players/'
 
 	def test_all_fields_present(self):
 		response = requests.get(self.URL, headers = self.VALID_HEADER)

@@ -6,7 +6,7 @@ LOGGER = LogHandler(__name__)
 
 
 class PastStatisticsEndpointTests(BaseEndpointTests):
-	URL = 'http://127.0.0.1:8000/player_list/api/past_statistics/'
+	URL = 'http://127.0.0.1:8000/api/past_statistics/'
 
 	def test_all_fields_present(self):
 		params_ = {'name' : 'Chris Bosh'}

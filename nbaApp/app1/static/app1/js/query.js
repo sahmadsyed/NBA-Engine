@@ -20,6 +20,6 @@ $(document).ready(function(){
 	$('.player-pill').click(function(){
 		var infoBlock = this.parentElement.nextElementSibling;
 		var playerId = infoBlock.getElementsByClassName('player-id')[0].value;
-		infoBlock.getElementsByClassName('view-more')[0].href = '/player_list/profile/' + playerId;
+		infoBlock.getElementsByClassName('view-more')[0].href = '/profile/' + playerId;
 	});
 });

@@ -4,7 +4,7 @@ from app1.tests.test_past_statistics_endpoint import PastStatisticsEndpointTests
 
 
 class CurrentStatisticsEndpointTests(PastStatisticsEndpointTests):
-	URL = 'http://127.0.0.1:8000/player_list/api/current_statistics/'
+	URL = 'http://127.0.0.1:8000/api/current_statistics/'
 
 	def test_with_no_params(self):
 		response = requests.get(self.URL, headers = self.VALID_HEADER)

@@ -215,6 +215,7 @@ def player_page(request, pid):
                 video_links.append(str('https://www.youtube.com/v/%s' % i['id']['videoId']))
         videos = video_links
     except HttpError, e:
+        LOGGER.log(ERROR, 'YouTube API Call Error: %s' % e)
         raise e
         
     context = RequestContext(request, {'player': player, 'videos': videos, 'stats': stats})
