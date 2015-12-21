@@ -16,7 +16,7 @@ from cacheback.base import Job
 from app1.models import Player, Statistics, PlayerID
 from app1.serializers import StatisticsSerializer, PlayerSerializer
 from app1.utils import LogHandler, get_current_season
-from app1.forms import EmailForm
+from app1.forms import RequestTokenEmailForm, ContactUsForm
 from smtplib import SMTP
 from logging import ERROR, INFO
 from requests import get
@@ -222,12 +222,17 @@ def player_page(request, pid):
     return HttpResponse(template.render(context))
 
 def api_docs(request):
-    template = loader.get_template('app1/apidocs.html');
-    context = RequestContext(request);
-    return HttpResponse(template.render(context));
+    template = loader.get_template('app1/api-docs.html')
+    context = RequestContext(request)
+    return HttpResponse(template.render(context))
+
+def contact_us_page(request):
+    template = loader.get_template('app1/contact-us.html')
+    context = RequestContext(request)
+    return HttpResponse(template.render(context))
 
 def request_token(request):
-    form = EmailForm(request.POST)
+    form = RequestTokenEmailForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
         try:
@@ -236,19 +241,32 @@ def request_token(request):
             user = User.objects.create_user(email)
 
         token = Token.objects.get_or_create(user=user)
-
-        fromaddr = 'pqalmsc@gmail.com'
-        toaddr = email
         msg = 'Subject: %s\n\n%s' % ('NBA Authentication Token', 'Authentication Token: %s' % token[0].key)
-
-        username = settings.NBA_APP_EMAIL
-        password = settings.NBA_APP_PASSWORD
-        
-        server = SMTP('smtp.gmail.com:587')
-        server.starttls()
-        server.login(username, password)
-        server.sendmail(fromaddr, toaddr, msg)
-        server.quit()
+        send_email(email, msg)
         return HttpResponse('Success! Authentication token sent to: %s' % email)
     else:
         return HttpResponse('Error! Invalid email address')
+
+def contact_us(request):
+    form = ContactUsForm(request.POST)
+    if form.is_valid():
+        cleaned_form = form.cleaned_data
+        subject = 'Subject: Contact Us\n\n%s%s%s'
+        name = 'Name: %s\n' % cleaned_form['name']
+        email = 'Email Address: %s\n' % cleaned_form['email']
+        msg = 'Message: %s\n' % cleaned_form['message']
+        ready_to_send = subject % (name, email, msg)
+
+        send_email(settings.NBA_APP_EMAIL, ready_to_send)
+        return HttpResponse('Thank you for contacting us!')
+    else:
+        return HttpResponse('Error! Invalid data entered')
+
+def send_email(to_email, msg):
+    username = settings.NBA_APP_EMAIL
+    password = settings.NBA_APP_PASSWORD
+    server = SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(username, password)
+    server.sendmail(username, to_email, msg)
+    server.quit()
