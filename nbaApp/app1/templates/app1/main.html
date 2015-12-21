@@ -6,16 +6,21 @@
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/base.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'app1/css/footer.css' %}">
 
 <body id = 'body-container'>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3 input-group input-group-lg">
-				<input id = 'search' type = 'text' name = 'playername'  placeholder = 'Search Players' />
-				<span id = "advSearch"><a href="/player_list/advsearch/"> Advanced Search </a></span>
+	<div class="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3 input-group input-group-lg">
+					<input id = 'search' type = 'text' name = 'playername'  placeholder = 'Search Players' />
+					<span id = "advSearch"><a href="/player_list/advsearch/"> Advanced Search </a></span>
+				</div>
 			</div>
 		</div>
+		<div class="push"></div>
 	</div>
+	{% include "app1/footer.html" %}
 </body>
 
 <script type = "text/javascript" src = "{% static 'app1/js/main.js' %}"></script>

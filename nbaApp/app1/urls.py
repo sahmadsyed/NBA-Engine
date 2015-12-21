@@ -11,7 +11,7 @@ urlpatterns = patterns('',
                        url(r'^api/past_statistics/$', views.PastStatisticsList.as_view(), name = 'past_stats_list'),
                        url(r'^api/current_statistics/$', views.CurrentStatistics.as_view(), name = 'current_stats_list'),
                        url(r'^api/auth_token/$', rest_views.obtain_auth_token, name = 'auth_token'),
-                       url(r'^api/docs/$', views.api_docs, name = 'api_docs'),
+                       url(r'^api/$', views.api_docs, name = 'api_docs'),
                        url(r'^api/email_confirm/$', views.request_token, name = 'request_token'),
                        url(r'^profile/(?P<pid>.+)/$', views.player_page, name = 'player_page'))
 					   
