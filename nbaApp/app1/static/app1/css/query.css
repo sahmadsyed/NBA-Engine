@@ -1,0 +1,93 @@
+.player-pill {
+	color: black;
+	background-color: white;
+	border-radius: 10px;
+	font-size: 37px;
+	font-family: "Courier New", Courier, monospace;
+	text-align: left;
+	border: 2px solid black;
+	margin: 0 auto; display: block;
+	width: 1400px;
+}
+
+.player-pill:focus {
+	outline: 0;
+}
+
+.content {
+	padding-top: 10px;
+	background-color: black;
+	border: 2px solid black;
+	width: 1330px;
+	margin: 0 auto;
+	display: block;
+}
+
+.info {
+	margin-top: 20px;
+	margin-left: 30px;
+	line-height: 300%;
+}
+
+.info span {
+	color: white;
+	margin-bottom: 17px;
+	font-size: 19px;
+}
+
+.stats {
+	margin-top: 27px;
+	color: white; 
+	border: 2px solid white; 
+}
+
+.stats th, td {
+	font-size: 19px;
+	border: 2px solid white;
+	padding: 8px;
+	text-align: center;
+}
+
+.pic {
+	border: 2px solid white;
+	background-color: white;
+}
+
+.view-more {
+	color: #8A2E8A; 
+	font-family: "Courier New", Courier, monospace; 
+}
+
+#search {
+	font-size: 35px;
+	margin-bottom: 5px;
+}
+
+#advSearch {
+	margin-bottom: 10px;
+}
+
+#noResults {
+	font-family: Arial;
+	width: 300px;
+	height: 70px;
+	padding-top: 50px;
+	color: black;
+	font-size: 30px;
+	display: block;
+	margin: 0 auto
+}
+
+#noResults > span {
+	display: block;
+	margin: 0 auto;
+}
+
+#accordion-container {
+	display: none;
+}
+
+#pagination-container {
+	display: none;
+	text-align: center;
+}

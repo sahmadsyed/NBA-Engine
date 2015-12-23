@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 import sys
+from secret_settings import *
+
 sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/nbaApp')
 sys.path.insert(0, '/home/salman/NBA-Players-Database-Website/')
 
@@ -44,6 +46,8 @@ INSTALLED_APPS = (
     'south',
     'rest_framework',
     'rest_framework.authtoken',
+    'cacheback',
+    'djcelery',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,3 +102,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+import djcelery
+djcelery.setup_loader()

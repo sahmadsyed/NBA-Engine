@@ -1,5 +1,6 @@
-from rest_framework.views import exception_handler
 import logging
+from rest_framework.views import exception_handler
+from datetime import datetime
 
 def api_exception_handler(exc, context):
     response = exception_handler(exc, context)
@@ -24,3 +25,10 @@ class LogHandler(object):
 		self.logger.addHandler(file_handle)
 	def log(self, severity, msg): 
 		self.logger.log(severity, msg)
+
+def get_current_season():
+    now = datetime.now()
+    if now.month >= 11:
+        return '%s-%s' % (now.year, str(now.year + 1)[-2:])
+    else:
+        return '%s-%s' % (now.year - 1, str(now.year)[-2:])
