@@ -182,7 +182,7 @@ def player_name(request, pname):
         page_range = False
 
     template = loader.get_template('app1/query.html')
-    context = RequestContext(request, {'player_list': player_list, 'page_range': page_range, 'current_page': current_page})
+    context = RequestContext(request, {'player_list': player_list, 'page_range': page_range, 'current_page': current_page, 'search_query': pname})
     return HttpResponse(template.render(context))
 
 def no_player_name(request):

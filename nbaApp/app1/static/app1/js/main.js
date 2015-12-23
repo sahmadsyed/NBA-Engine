@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$('#search').focus();
 	$(document).keypress(function(key) {
 		if(key.which === 13) {
 			var activeElem = document.activeElement;

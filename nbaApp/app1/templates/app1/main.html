@@ -8,13 +8,21 @@
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/base.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'app1/css/footer.css' %}">
 
+<head>
+	<title>NBA Engine</title>
+</head>
+
 <body id = 'body-container'>
 	<div class="wrapper">
 		<div class="container-fluid">
 			<div class="row">
+				<div id = "title-block">
+					<img src="../../static/app1/images/logo.png" />
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-6 col-md-offset-3 input-group input-group-lg">
 					<input id = 'search' type = 'text' name = 'playername'  placeholder = 'Search Players' />
-					<span id = "advSearch"><a href="/advsearch/"> Advanced Search </a></span>
 				</div>
 			</div>
 		</div>
