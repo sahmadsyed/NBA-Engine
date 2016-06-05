@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NBA Engine API Documentation</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'main/css/api-docs.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'main/css/footer.css' %}">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="header clearfix">
+        <h3 class="text-muted">API Documentation</h3>
+      </div>
+      <div class="panel panel-info">
+        <div class="panel-heading"><b>Authentication Token</b></div>
+        <div class="panel-body">
+          <form action="/api/request_email_confirm/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <div class="form-group">
+              <label for="email">Please enter valid email address</label>
+              <input name="email" type="email" class="form-control" id="email" placeholder="Email Address" required/>
+            </div>
+            <button style="display:block; margin: 0 auto" type="submit" class="btn btn-info">Request Token</button>
+          </form>
+        </div>
+      </div>
+      <div class="panel panel-info">
+        <div class="panel-heading"><b>Endpoints</b></div>
+        <div class="panel-body">
+          <h4 class="endpoint-title">Resource</h4>
+          <p class="well well-sm resource"><code>GET /api/players</code></p>
+          <h4 class="endpoint-title">Query Parameters</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr class="query-param-headers">
+                <td>Name</td>
+                <td>Type</td>
+                <td>Required</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>name</td>
+                <td>string</td>
+                <td><span class="required-param"><span class="glyphicon glyphicon-remove"></span></span></td>
+                <td>First and last name of player</td>
+              </tr>
+              <tr>
+                <td>draft_year</td>
+                <td>int</td>
+                <td><span class="required-param"><span class="glyphicon glyphicon-remove"></span></span></td>
+                <td>Year player entered league (format: yyyy)</td>
+              </tr>
+              <tr>
+                <td>position</td>
+                <td>string</td>
+                <td><span class="required-param"><span class="glyphicon glyphicon-remove"></span></span></td>
+                <td>One of: Guard, Forward, Center</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 class="endpoint-title">Request</h4>
+          <p class="well well-sm resource">
+            <code>
+              curl --request GET "http://127.0.0.1:8000/api/players?name=Chris+Bosh" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
+            </code>
+          </p>
+          <h4 class="endpoint-title">Response</h4>
+          <div class="well">
+            <code>
+              <span>{</span><br/>
+              <span class="level-2">"count" : 1,</span><br/>
+              <span class="level-2">"players": [</span><br/>
+              <span class="level-3">{</span><br/>
+              <span class="level-4">"id": 208,</span><br/>
+              <span class="level-4">"name": "Chris Bosh",</span><br/>
+              <span class="level-4">"image": "//upload.wikimedia.org/wikipedia/commons/thumb/8/8d/<br/>Chris_Bosh_e1.jpg/220px-Chris_Bosh_e1.jpg",</span><br/>
+              <span class="level-4">"draft_year": 2003,</span><br/>
+              <span class="level-4">"position": "Power forward",</span><br/>
+              <span class="level-4">"height": 83,</span><br/>
+              <span class="level-4">"weight": 235</span><br/>
+              <span class="level-3">}</span><br/>
+              <span class="level-2">]</span><br/>
+              <span>}</span>
+            </code>
+          </div>
+          <br/>
+          <h4 class="endpoint-title">Resource</h4>
+          <p class="well well-sm resource"><code>GET /api/past_statistics</code></p>
+          <h4 class="endpoint-title">Query Parameters</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr class="query-param-headers">
+                <td>Name</td>
+                <td>Type</td>
+                <td>Required</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>name</td>
+                <td>string</td>
+                <td><span class="required-param"><span class="glyphicon glyphicon-ok"></span></span></td>
+                <td>First and last name of player</td>
+              </tr>
+              <tr>
+                <td>season</td>
+                <td>int</td>
+                <td><span class="required-param"><span class="glyphicon glyphicon-remove"></span></span></td>
+                <td>Start year of NBA season (format: yyyy)</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4 class="endpoint-title">Request</h4>
+          <p class="well well-sm resource">
+            <code>
+              curl --request GET "http://127.0.0.1:8000/api/past_statistics?name=LeBron+James&season=2003" -H "Authorization: Token <i>AUTHENTICATION_TOKEN</i>"
+            </code>
+          </p>
+          <h4 class="endpoint-title">Response</h4>
+          <div class="well">
+            <code>
+              <span>{</span><br/>
+              <span class="level-2">"count": 1,</span><br/>
+              <span class="level-2">"stats": [</span><br/>
+              <span class="level-3">{</span><br/>
+              <span class="level-4">"id": 518,</span><br/>
+              <span class="level-4">"name": "LeBron James",</span><br/>
+              <span class="level-4">"ppg": 20.9,</span><br/>
+              <span class="level-4">"apg": 5.9,</span><br/>
+              <span class="level-4">"rpg": 5.5,</span><br/>
+              <span class="level-4">"spg": 1.6,</span><br/>
+              <span class="level-4">"bpg": 0.7,</span><br/>
+              <span class="level-4">"fg": 0.417,</span><br/>
+              <span class="level-4">"tfg": 0.29,</span><br/>
+              <span class="level-4">"mpg": 39.5,</span><br/>
+              <span class="level-4">"ft": 0.754,</span><br/>
+              <span class="level-4">"gp": 79.0,</span><br/>
+              <span class="level-4">"gs": 79.0,</span><br/>
+              <span class="level-4">"team": "Cleveland Cavaliers",</span><br/>
+              <span class="level-4">"season": "2003"</span><br/>
+              <span class="level-3">}</span><br/>
+              <span class="level-2">]</span><br/>
+              <span>}</span>
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="push"></div>
+  </div>
+  {% include "main/footer.html" %}
+</body>
+</html>
