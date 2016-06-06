@@ -8,7 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
-import sys
+import sys, djcelery
 from secret_settings import *
 
 sys.path.insert(0, '/home/salman/nba_engine')
@@ -92,6 +92,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# REST framework config
+
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'utils.api_exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -102,6 +105,9 @@ REST_FRAMEWORK = {
     )
 }
 
+
+# cache config
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -109,5 +115,7 @@ CACHES = {
     }
 }
 
-import djcelery
+
+# enable celery
+
 djcelery.setup_loader()
