@@ -4,48 +4,95 @@ from django.conf import settings
 from django.db.models.signals import post_save, pre_init
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+
 from utils import LogHandler
-from logging import DEBUG as d
 
 
-MAX_CHAR_LENGTH = 500
-DEFAULT_NUM = 0
-DEFAULT_PIC_NOT_FOUND = 'http://i.imgur.com/3FJGY4h.jpg?1'
-LOGGER = LogHandler(__name__)
+# constants
+MAX_CHAR_LENGTH = 100
 
 class Statistics(Model):
-    name = CharField('Name', max_length = MAX_CHAR_LENGTH, default = '')
-    ppg = FloatField('PPG', default = DEFAULT_NUM)
-    apg = FloatField('APG', default = DEFAULT_NUM)
-    rpg = FloatField('RPG', default = DEFAULT_NUM)
-    spg = FloatField('SPG', default = DEFAULT_NUM)
-    bpg = FloatField('BPG', default = DEFAULT_NUM)
-    fg = FloatField('FG%', default = DEFAULT_NUM)
-    tfg = FloatField('3FG%', default = DEFAULT_NUM)
-    mpg = FloatField('MPG', default = DEFAULT_NUM)
-    ft = FloatField('FT%', default = DEFAULT_NUM)
-    gp = FloatField('GP', default = DEFAULT_NUM)
-    to = FloatField('TO', default = DEFAULT_NUM)
-    team = CharField('Team', max_length = MAX_CHAR_LENGTH, default = '')
-    season = CharField('Season', max_length = MAX_CHAR_LENGTH, default = '')
-    player_id = IntegerField('Player ID', null=True)
+    """
+    Holds fields for basic NBA player stats.
+
+    Attributes:
+        player_id (integer): Unique id of player who these stats belong to
+        name (str): Name of player who these stats belong to
+        ppg (float): Points per game
+        apg (float): Assists per game
+        rpg (float): Rebounds per game
+        spg (float): Steals per game
+        bpg (float): Blocks per game
+        fg (float): Field goal percentage
+        tfg (float): Three point field goal percentage
+        ft (float): Free throw percentage
+        mpg (float): Minutes per game
+        gp (float): Games played
+        topg (float): Turnovers per game
+        team (str): Team of player when he had these stats
+        season (str): Season player had these stats
+
+    """
+
+    player_id = IntegerField('Player ID')
+    name = CharField('Name', max_length = MAX_CHAR_LENGTH)
+    ppg = FloatField('PPG')
+    apg = FloatField('APG')
+    rpg = FloatField('RPG')
+    spg = FloatField('SPG')
+    bpg = FloatField('BPG')
+    fg = FloatField('FG%')
+    tfg = FloatField('3FG%')
+    mpg = FloatField('MPG')
+    ft = FloatField('FT%')
+    gp = FloatField('GP')
+    topg = FloatField('TO')
+    team = CharField('Team', max_length = MAX_CHAR_LENGTH)
+    season = CharField('Season', max_length = MAX_CHAR_LENGTH)
+
     def __unicode__(self):
        return '%s %s' % (self.name, self.season)
 
 class Player(Model):
-    name = CharField('Name', max_length = MAX_CHAR_LENGTH, default = '')
-    number = IntegerField('Number', null=True)
-    image = TextField(default = DEFAULT_PIC_NOT_FOUND)
-    year_enter_league = IntegerField('Year Entered League', null=True)
-    position = CharField('Position', max_length = MAX_CHAR_LENGTH, default = '')
-    height = CharField('Height', max_length = MAX_CHAR_LENGTH, default = '')
-    weight = CharField('Weight', max_length = MAX_CHAR_LENGTH, default = '')
-    current_team = CharField('Current Team', max_length = MAX_CHAR_LENGTH, default ='')
-    player_id = IntegerField('Player ID', null=True)
+    """
+    Holds fields for basic NBA player information.
+
+    Attributes:
+        player_id (integer): Unique id of player
+        name (str): Name of player
+        number (integer): Number of player
+        image (str): URL of player image
+        year_enter_leage (integer): Year player entered league
+        position (str): Position player plays
+        height (str): Height of player (ft)
+        weight (str): Weight of player (lbs)
+        current_team (str): Name of team player currently plays for
+
+    """
+
+    player_id = IntegerField('Player ID')
+    name = CharField('Name', max_length = MAX_CHAR_LENGTH)
+    number = IntegerField('Number')
+    image = URLField(default = '')
+    year_enter_league = IntegerField('Year Entered League')
+    position = CharField('Position', max_length = MAX_CHAR_LENGTH)
+    height = CharField('Height', max_length = MAX_CHAR_LENGTH)
+    weight = CharField('Weight', max_length = MAX_CHAR_LENGTH)
+    current_team = CharField('Current Team', max_length = MAX_CHAR_LENGTH)
+
     def __unicode__(self):
         return self.name
 
 class PlayerID(Model):
-    player_id = IntegerField('Player ID', null=True)
+    """
+    Holds unique id for NBA player
+
+    Attributes:
+        player_id (integer): Unique id of player
+
+    """
+
+    player_id = IntegerField('Player ID')
+
     def __int__(self):
         return self.player_id

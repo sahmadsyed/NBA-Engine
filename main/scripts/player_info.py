@@ -1,8 +1,11 @@
 from requests import get
 from logging import ERROR
+
 from main.models import PlayerID, Player
 from utils import LogHandler
 
+
+# constants
 URL = 'http://stats.nba.com/stats/commonplayerinfo'
 LEAGUE_ID = '00'
 SEASON_TYPE = 'Regular Season'
@@ -10,6 +13,8 @@ URL_IMAGE = 'http://stats.nba.com/media/players/230x185/%d.png'
 LOGGER = LogHandler(__name__)
 
 def get_player_info():
+	"""Acquires basic info of all current NBA players and stores in DB."""
+
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
 	params_ = {'LeagueID' : LEAGUE_ID, 'SeasonType' : SEASON_TYPE}
 	Player.objects.all().delete()

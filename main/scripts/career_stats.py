@@ -1,15 +1,19 @@
 from requests import get
 from logging import ERROR
+
 from main.models import Statistics, PlayerID, Player
 from utils import LogHandler, get_current_season
 
+
+# constants
 URL = 'http://stats.nba.com/stats/playercareerstats'
 LEAGUE_ID = '00'
 PER_MODE = 'PerGame'
 LOGGER = LogHandler(__name__)
 
-
 def get_career_stats():
+	"""Acquires career stats of all current NBA players and stores in DB."""
+
 	player_ids = [p.player_id for p in PlayerID.objects.all()]
 	params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
 	Statistics.objects.all().delete()
@@ -41,7 +45,7 @@ def get_career_stats():
 				stats.mpg = stat[8]
 				stats.ft = stat[17]
 				stats.gp = stat[6]
-				stats.to = stat[24]
+				stats.topg = stat[24]
 				stats.team = stat[4]
 				stats.season = stat[1]
 				stats.player_id = play_id
