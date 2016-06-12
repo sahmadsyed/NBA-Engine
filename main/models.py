@@ -94,5 +94,5 @@ class PlayerID(Model):
 
     player_id = IntegerField('Player ID')
 
-    def __int__(self):
-        return self.player_id
+    def __unicode__(self):
+        return unicode(self.player_id)
