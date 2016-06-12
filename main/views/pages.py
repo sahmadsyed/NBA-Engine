@@ -1,13 +1,13 @@
+from logging import ERROR, INFO
+from requests import get
+from itertools import dropwhile
+
 from django.template import RequestContext, loader
 from django.http import Http404, HttpResponse
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 from apiclient.discovery import build
 from apiclient.errors import HttpError
-
-from logging import ERROR, INFO
-from requests import get
-from itertools import dropwhile
 
 from utils import LogHandler, get_current_season
 from main.views.helpers.current_season_stats_job import CurrentSeasonStatsJob

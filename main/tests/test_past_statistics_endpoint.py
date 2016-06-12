@@ -1,9 +1,10 @@
 import requests
+
 from utils import LogHandler
 from main.tests.base_endpoint_tests import BaseEndpointTests
 
-LOGGER = LogHandler(__name__)
 
+LOGGER = LogHandler(__name__)
 
 class PastStatisticsEndpointTests(BaseEndpointTests):
 	URL = 'http://127.0.0.1:8000/api/past_statistics/'

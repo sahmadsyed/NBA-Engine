@@ -1,4 +1,5 @@
 from logging import ERROR, INFO
+
 from cacheback.base import Job
 
 from main.models import PlayerID

@@ -1,9 +1,9 @@
-import scrapy
-
 from logging import ERROR, INFO
 from itertools import count
 from xml.dom.minidom import parse
 from urllib2 import urlopen
+
+import scrapy
 
 from crawler.items import PlayerIdItem
 from utils import LogHandler

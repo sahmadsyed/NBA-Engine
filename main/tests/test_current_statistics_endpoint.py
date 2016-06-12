@@ -1,5 +1,6 @@
 import requests
 from unittest import skip
+
 from main.tests.test_past_statistics_endpoint import PastStatisticsEndpointTests
 
 

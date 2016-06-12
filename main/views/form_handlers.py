@@ -1,9 +1,10 @@
+from smtplib import SMTP
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework.authtoken.models import Token
-from smtplib import SMTP
 
 from main.forms import RequestTokenEmailForm, ContactUsForm
 

@@ -1,11 +1,12 @@
 import requests
 from random import shuffle
-from utils import LogHandler
-from main.tests.base_endpoint_tests import BaseEndpointTests
 from logging import DEBUG
 
-LOGGER = LogHandler(__name__)
+from utils import LogHandler
+from main.tests.base_endpoint_tests import BaseEndpointTests
 
+
+LOGGER = LogHandler(__name__)
 
 class PlayersEndpointTests(BaseEndpointTests):
 	URL = 'http://127.0.0.1:8000/api/players/'
