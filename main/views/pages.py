@@ -1,5 +1,4 @@
 from logging import ERROR, INFO
-from requests import get
 from itertools import dropwhile
 
 from django.template import RequestContext, loader

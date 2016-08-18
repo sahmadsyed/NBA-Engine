@@ -1,9 +1,10 @@
 from logging import ERROR, INFO
+from requests import get
 
 from cacheback.base import Job
 
 from main.models import PlayerID
-from utils import LogHandler
+from utils import LogHandler, get_current_season
 
 
 # constants
