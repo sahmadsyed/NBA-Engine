@@ -1,1 +1,0 @@
-python manage.py test app1.tests.test_players_endpoint.PlayersEndpointTests app1.tests.test_past_statistics_endpoint.PastStatisticsEndpointTests app1.tests.test_current_statistics_endpoint.CurrentStatisticsEndpointTests -v 2

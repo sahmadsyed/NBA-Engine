@@ -1,0 +1,110 @@
+<head>
+	<title>{{ search_query }} - Search Results</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/query.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/base.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/footer.css' %}">
+</head>
+
+<body id = 'body-container'>
+	<div class="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-10">
+					<input id = 'search' type = 'text' name = 'playername'  placeholder = 'Search Players' />
+				</div>
+			</div>
+			{% if player_list %}
+			<div id = 'accordion-container'>
+				{% for player in player_list %}
+				<div class = 'row'>
+					<button  class = 'player-pill'>
+						<span class = 'button-text'> {{ player.info.name }} </span>
+						<span style ='font-size:12px'> {{ player.stats.team }} </span>
+						<span style = 'float:right'> {{ player.info.number }}</span>
+					</button>
+				</div>
+				<div class = 'content'>
+					<div class='info col-xs-2'>
+						<span><b> Team: </b> {{ player.stats.team }} </span></br>
+						<span><b> Draft Year: </b> {{ player.info.year_enter_league }} </span></br>
+						<span><b> Height: </b> {{ player.info.height }} ft</span></br>
+						<span><b> Weight: </b> {{ player.info.weight }} lb</span>
+					</div>
+					<div class='col-xs-7'>
+						<table class="stats table table-bordered">
+							<thead>
+								<tr><th colspan = '11'> {{ player.stats.season }} Season Stats </th></tr>
+								<tr>
+									<th> PPG </th>
+									<th> APG </th>
+									<th> RPG </th>
+									<th> SPG </th>
+									<th> BPG </th>
+									<th> FG </th>
+									<th> TFG </th>
+									<th> MPG </th>
+									<th> FT </th>
+									<th> GP </th>
+									<th> TO </th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td> {{ player.stats.ppg }} </td>
+									<td> {{ player.stats.apg }} </td>
+									<td> {{ player.stats.rpg }} </td>
+									<td> {{ player.stats.spg }} </td>
+									<td> {{ player.stats.bpg }} </td>
+									<td> {{ player.stats.fg }} </td>
+									<td> {{ player.stats.tfg }} </td>
+									<td> {{ player.stats.mpg }} </td>
+									<td> {{ player.stats.ft }} </td>
+									<td> {{ player.stats.gp }} </td>
+									<td> {{ player.stats.topg }} </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class='col-xs-2'>
+						<img class = 'pic' src = {{ player.info.image }}></img>
+						<a class = 'view-more'> View more &#9658; </a>
+						<input class = 'player-id' type = 'hidden' value = {{ player.info.player_id }}/>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			{% else %}
+			<div id = 'noResults'><span>No results found</span></div>
+			{% endif %}
+
+			<div id="pagination-container">
+				{% if page_range %}
+				<ul class="pagination pagination-lg">
+					{% for p in page_range %}
+					{% if p == current_page %}
+					<li class="active">
+						<a style="background-color: black; color: white" href="./?page={{ p }}"> {{ p }} </a>
+					</li>
+					{% else %}
+					<li>
+						<a style="background-color: white; color: black" href="./?page={{ p }}"> {{ p }} </a>
+					</li>
+					{% endif %}
+					{% endfor %}
+				</ul>
+				{% endif %}
+			</div>
+			<div class="push"></div>
+		</div>
+	</div>
+	{% include "main/footer.html" %}
+</body>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type = "text/javascript" src = "{% static 'main/js/main.js' %}"></script>
+<script type = "text/javascript" src = "{% static 'main/js/query.js' %}"></script>
