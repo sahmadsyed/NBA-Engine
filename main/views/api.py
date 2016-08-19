@@ -8,15 +8,30 @@ from main.views.helpers.current_season_stats_job import CurrentSeasonStatsJob
 
 
 class PlayersList(APIView):
+    """
+    If request is valid, returns list of players based on supplied parameters.
+    If request is invalid, returns error with appropriate message.
+
+    Attributes:
+        permission_classes (object): Specifies permissions needed to receive data
+
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        query_set = self.get_players()
+        """Returns response to GET request for list of players."""
+
+        query_set = self._get_players()
         serializer = PlayerSerializer(query_set, many=True)
         resp_data = {'count' : len(query_set), 'players' : serializer.data}
         return Response(resp_data)
 
-    def get_players(self):
+    def _get_players(self):
+        """
+        Helper function to retrieve list of players from DB based on request
+        parameters.
+        """
         query = Player.objects.all()
         name_ = self.request.query_params.get('name')
         draft_year_ = self.request.query_params.get('draft_year')
@@ -34,15 +49,30 @@ class PlayersList(APIView):
         return query
 
 class PastStatisticsList(APIView):
+    """
+    If request is valid, returns past stats of players based on supplied parameters.
+    If request is invalid, returns error with appropriate message.
+
+    Attributes:
+        permission_classes (object): Specifies permissions needed to receive data
+
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        query_set = self.get_stats()
+        """Returns response to GET request for past stats."""
+
+        query_set = self._get_stats()
         serializer = StatisticsSerializer(query_set, many=True)
         resp_data = {'count' : len(query_set), 'stats' : serializer.data}
         return Response(resp_data)
 
-    def get_stats(self):
+    def _get_stats(self):
+        """
+        Helper function to retrieve past stats from DB based on request
+        parameters.
+        """
         name_ = self.request.query_params.get('name')
         if not name_:
             raise ParseError('Missing \'name\'')
@@ -57,7 +87,16 @@ class PastStatisticsList(APIView):
         return query
 
 class CurrentStatistics(PastStatisticsList):
-    def get_stats(self):
+    """
+    If request is valid, returns current stats of players based on supplied parameters.
+    If request is invalid, returns error with appropriate message.
+    """
+
+    def _get_stats(self):
+        """
+        Helper function to retrieve current stats from DB based on request
+        parameters.
+        """
         current_season_stats = CurrentSeasonStatsJob().get()
         name_ = self.request.query_params.get('name')
         if name_:

@@ -14,10 +14,23 @@ STATS_URL = 'http://stats.nba.com/stats/playercareerstats'
 LOGGER = LogHandler(__name__)
 
 class CurrentSeasonStatsJob(Job):
+    """
+    Retrieves and caches current regular season stats of all players.
+
+    Attributes:
+        lifetime (integer): number of seconds cached data should remain valid for
+        fetch_on_miss (boolean): True if missing data should be fetched.
+                                 False otherwise.
+
+    """
+
     lifetime = 86400
     fetch_on_miss = True
 
     def fetch(self):
+        """
+        Makes call to STATS_URL to retrieve regular season stats of all players.
+        """
         player_ids = [p.player_id for p in PlayerID.objects.all()]
         params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
         current_season_stats = []
@@ -64,4 +77,6 @@ class CurrentSeasonStatsJob(Job):
         return current_season_stats
 
     def should_stale_item_be_fetched_synchronously(self, delta):
+        """Retrieves stale data asynchronously."""
+
         return False
