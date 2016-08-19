@@ -30,6 +30,10 @@ class CurrentSeasonStatsJob(Job):
     def fetch(self):
         """
         Makes call to STATS_URL to retrieve regular season stats of all players.
+
+        Returns:
+            List[object]: List of Statistics objects of current season for all players
+
         """
         player_ids = [p.player_id for p in PlayerID.objects.all()]
         params_ = {'LeagueID' : LEAGUE_ID, 'PerMode' : PER_MODE}
@@ -77,6 +81,10 @@ class CurrentSeasonStatsJob(Job):
         return current_season_stats
 
     def should_stale_item_be_fetched_synchronously(self, delta):
-        """Retrieves stale data asynchronously."""
+        """
+        Specifies to retrieve stale data asynchronously.
 
+        Returns:
+            boolean: True if stale data should be fetched sync. False otherwise.
+        """
         return False

@@ -20,8 +20,13 @@ class PlayersList(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        """Returns response to GET request for list of players."""
+        """
+        Returns response to GET request for list of players based on request.
 
+        Returns:
+            object: Response object containing list of players and length of list
+
+        """
         query_set = self._get_players()
         serializer = PlayerSerializer(query_set, many=True)
         resp_data = {'count' : len(query_set), 'players' : serializer.data}
@@ -31,6 +36,10 @@ class PlayersList(APIView):
         """
         Helper function to retrieve list of players from DB based on request
         parameters.
+
+        Returns:
+            List[object]: List of Player objects meeting request parameters
+
         """
         query = Player.objects.all()
         name_ = self.request.query_params.get('name')
@@ -61,8 +70,13 @@ class PastStatisticsList(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        """Returns response to GET request for past stats."""
+        """
+        Returns response to GET request for past stats based on request.
 
+        Returns:
+            object: Response object containing list of stats and length of list
+
+        """
         query_set = self._get_stats()
         serializer = StatisticsSerializer(query_set, many=True)
         resp_data = {'count' : len(query_set), 'stats' : serializer.data}
@@ -72,6 +86,10 @@ class PastStatisticsList(APIView):
         """
         Helper function to retrieve past stats from DB based on request
         parameters.
+
+        Returns:
+            List[object]: List of Statistics objects meeting request parameters
+
         """
         name_ = self.request.query_params.get('name')
         if not name_:
@@ -96,6 +114,10 @@ class CurrentStatistics(PastStatisticsList):
         """
         Helper function to retrieve current stats from DB based on request
         parameters.
+
+        Returns:
+            List[object]: List of Statistics objects meeting request parameters
+
         """
         current_season_stats = CurrentSeasonStatsJob().get()
         name_ = self.request.query_params.get('name')
